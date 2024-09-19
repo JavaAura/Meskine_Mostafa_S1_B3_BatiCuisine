@@ -6,6 +6,7 @@ import org.BatiCuisine.Repository.Interfaces.ClientRepository;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class ClientRepositoryImpl implements ClientRepository {
 
@@ -38,5 +39,10 @@ public class ClientRepositoryImpl implements ClientRepository {
     @Override
     public List<Client> getAllClients() {
         return clientDao.getAll();
+    }
+
+    @Override
+    public Client getClientByName(String name) {
+        return clientDao.getAll().stream().filter(client -> client.getName().equals(name)).findFirst().get();
     }
 }

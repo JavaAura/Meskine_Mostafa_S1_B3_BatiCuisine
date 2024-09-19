@@ -15,4 +15,6 @@ public interface ClientRepository {
     boolean removeClient(UUID id);
 
     List<Client> getAllClients();
+
+    Client getClientByName(String name);
 }

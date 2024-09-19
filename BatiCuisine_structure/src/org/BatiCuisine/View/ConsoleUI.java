@@ -1,6 +1,7 @@
 package org.BatiCuisine.View;
 
 import org.BatiCuisine.Model.Client;
+import org.BatiCuisine.Model.Project;
 import org.BatiCuisine.Repository.Impl.ClientRepositoryImpl;
 import org.BatiCuisine.Dao.Impl.ClientDaoImpl;
 import org.BatiCuisine.Service.ClientService;
@@ -31,7 +32,7 @@ public class ConsoleUI {
 
     public void mainMenu() {
         System.out.println("=== Welcome to the kitchen renovation project management application ===");
-        System.out.println("=== Main Menu ===");
+        System.out.println(" ============================== Main Menu ============================= ");
         System.out.println("1.Create a new project");
         System.out.println("2.Show All projects");
         System.out.println("3.Calculate the cost of a project");
@@ -53,13 +54,13 @@ public class ConsoleUI {
     }
 
     public void addNewClient() {
-        System.out.println("Enter client name: ");
-        String name = scan.next();
-        System.out.println("Enter client address: ");
-        String address = scan.next();
-        System.out.println("Enter client phone: ");
-        String phone = scan.next();
-        System.out.println("Is the client a professional? (true/false): ");
+        System.out.print("Enter client name: ");
+        String name = scan.nextLine();
+        System.out.print("Enter client address: ");
+        String address = scan.nextLine();
+        System.out.print("Enter client phone: ");
+        String phone = scan.nextLine();
+        System.out.print("Is the client a professional? (true/false): ");
         boolean isProfessional = scan.nextBoolean();
 
         Client client = new Client(UUID.randomUUID(), name, address, phone, isProfessional);
@@ -67,19 +68,31 @@ public class ConsoleUI {
     }
 
     public void searchClient() {
-//        System.out.println("Enter client ID (UUID format): ");
-//        String idInput = scan.next();
-//        try {
-//            UUID clientId = UUID.fromString(idInput);
-//            Client client = clientService.getClientById(clientId);
-//            if (client != null) {
-//                System.out.println("Client found: " + client);
-//            } else {
-//                System.out.println("No client found with ID: " + clientId);
-//            }
-//        } catch (IllegalArgumentException e) {
-//            System.out.println("Invalid UUID format");
-//        }
+        Client client = null;
+        System.out.println("--- searching an existing customer ---");
+        System.out.println("Enter customer name: ");
+        String name = scan.nextLine();
+        client = clientService.getClientByName(name);
+        if(client != null){
+            System.out.println("Client found!");
+            System.out.println(client);
+            System.out.print("Would you like to continue with this client? (y/n):");
+            String choice = scan.nextLine();
+            switch (choice){
+                case "y" -> addNewProject(client);
+                case "n" -> clientMenu();
+                default -> {
+                    System.out.println("invalid input!");
+                    mainMenu();
+                }
+            }
+        }else{
+            clientMenu();
+        }
+    }
+
+    public void addNewProject(Client client){
+
     }
 
     public void showAllProjects() {
