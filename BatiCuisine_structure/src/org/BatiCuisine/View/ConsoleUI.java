@@ -16,9 +16,7 @@ import java.util.UUID;
 public class ConsoleUI {
     private static final Scanner scan = new Scanner(System.in);
     private final ClientService clientService = new ClientService(new ClientRepositoryImpl(new ClientDaoImpl()));
-    ;
     private final ProjectService projectService = new ProjectService(new ProjectRepositoryImpl(new ProjectDaoImpl()));
-    ;
 
     public ConsoleUI() {
         while (true) {
@@ -67,10 +65,6 @@ public class ConsoleUI {
         switch (confirmation) {
             case "y" -> addNewMaterial(project);
             case "n" -> System.out.println("add labor");
-            default -> {
-                System.out.println("invalid input!");
-                mainMenu();
-            }
         }
     }
 
