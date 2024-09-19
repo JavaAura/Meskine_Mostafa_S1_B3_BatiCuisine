@@ -13,7 +13,7 @@ public class ConsoleUI {
             int choice = scan.nextInt();
             switch (choice) {
                 case 1 -> {
-
+                    clientMenu();
                 }
                 case 2 -> {
                     System.out.println("Afficher les projets existants");
@@ -35,6 +35,22 @@ public class ConsoleUI {
         System.out.println("2.Show All projects");
         System.out.println("3.Calculate the cost of a project");
         System.out.println("4.Exit");
-        System.out.println("=> ");
+        System.out.print("=> ");
+    }
+
+    public void clientMenu(){
+        System.out.println("Would you like to search for an existing customer or add a new one?");
+        System.out.println("1.Search an existing customer");
+        System.out.println("2.Add a new customer");
+        System.out.print("=> ");
+        int choice = scan.nextInt();
+        switch (choice){
+            case 1->{
+                System.out.println("Search an existing customer");
+            }
+            case 2->{
+                System.out.println("Add a new customer");
+            }
+        }
     }
 }
