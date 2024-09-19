@@ -14,7 +14,7 @@ public class ProjectDaoImpl implements ProjectDao {
     @Override
     public void create(Project project) {
         String query = "INSERT INTO projects (projectID, projectName, profitMargin, totalCost, projectStatus, surface, clientID) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        Connection conn = null;
+        Connection conn;
 
         try {
             conn = DbConnection.getInstance();
@@ -38,7 +38,7 @@ public class ProjectDaoImpl implements ProjectDao {
     @Override
     public Project read(UUID id) {
         String query = "SELECT * FROM projects WHERE projectID = ?";
-        Connection conn = null;
+        Connection conn;
         Project project = null;
 
         try {
@@ -71,7 +71,7 @@ public class ProjectDaoImpl implements ProjectDao {
     @Override
     public void update(Project project) {
         String query = "UPDATE projects SET projectName = ?, profitMargin = ?, totalCost = ?, projectStatus = ?, surface = ?, clientID = ? WHERE projectID = ?";
-        Connection conn = null;
+        Connection conn;
 
         try {
             conn = DbConnection.getInstance();
@@ -96,7 +96,7 @@ public class ProjectDaoImpl implements ProjectDao {
     @Override
     public boolean delete(UUID id) {
         String query = "DELETE FROM projects WHERE projectID = ?";
-        Connection conn = null;
+        Connection conn;
         boolean isDeleted = false;
 
         try {
@@ -120,7 +120,7 @@ public class ProjectDaoImpl implements ProjectDao {
     public List<Project> getAll() {
         List<Project> projects = new ArrayList<>();
         String query = "SELECT * FROM projects";
-        Connection conn = null;
+        Connection conn;
 
         try {
             conn = DbConnection.getInstance();
