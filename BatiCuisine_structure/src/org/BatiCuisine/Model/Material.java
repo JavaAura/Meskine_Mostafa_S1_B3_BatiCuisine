@@ -18,6 +18,14 @@ public class Material extends Component {
         this.unitCost = unitCost;
     }
 
+    public Material() {
+        super(UUID.randomUUID(), "", ComponentType.MATERIAL, 0.0, UUID.randomUUID());
+        this.transportCost = 0.0;
+        this.qualityCoefficient = 0.0;
+        this.quantity = 0.0;
+        this.unitCost = 0.0;
+    }
+
     // Getters and Setters
     public double getTransportCost() {
         return transportCost;
