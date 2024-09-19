@@ -4,6 +4,7 @@ import org.BatiCuisine.Model.Client;
 import org.BatiCuisine.Repository.Interfaces.ClientRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class ClientService {
@@ -33,7 +34,7 @@ public class ClientService {
         return clientRepository.getAllClients();
     }
 
-    public Client getClientByName(String name){
+    public Optional<Client> getClientByName(String name){
         return clientRepository.getClientByName(name);
     }
 }

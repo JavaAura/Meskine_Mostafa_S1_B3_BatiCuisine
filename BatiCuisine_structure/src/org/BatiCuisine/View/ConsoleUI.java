@@ -6,6 +6,7 @@ import org.BatiCuisine.Repository.Impl.ClientRepositoryImpl;
 import org.BatiCuisine.Dao.Impl.ClientDaoImpl;
 import org.BatiCuisine.Service.ClientService;
 
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -65,15 +66,16 @@ public class ConsoleUI {
 
         Client client = new Client(UUID.randomUUID(), name, address, phone, isProfessional);
         clientService.addClient(client);
+        addNewProject(client);
     }
 
     public void searchClient() {
-        Client client = null;
         System.out.println("--- searching an existing customer ---");
-        System.out.println("Enter customer name: ");
+        System.out.print("Enter customer name: ");
         String name = scan.nextLine();
-        client = clientService.getClientByName(name);
-        if(client != null){
+        Optional<Client> clientOptional = clientService.getClientByName(name);
+        if(clientOptional.isPresent()){
+            Client client = clientOptional.get();
             System.out.println("Client found!");
             System.out.println(client);
             System.out.print("Would you like to continue with this client? (y/n):");
@@ -87,6 +89,7 @@ public class ConsoleUI {
                 }
             }
         }else{
+            System.out.println("no client found by the name *" + name + "* !");
             clientMenu();
         }
     }

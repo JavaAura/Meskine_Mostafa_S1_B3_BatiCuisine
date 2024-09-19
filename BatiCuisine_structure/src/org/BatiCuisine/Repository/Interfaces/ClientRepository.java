@@ -3,6 +3,7 @@ package org.BatiCuisine.Repository.Interfaces;
 import org.BatiCuisine.Model.Client;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface ClientRepository {
@@ -16,5 +17,5 @@ public interface ClientRepository {
 
     List<Client> getAllClients();
 
-    Client getClientByName(String name);
+    Optional<Client> getClientByName(String name);
 }

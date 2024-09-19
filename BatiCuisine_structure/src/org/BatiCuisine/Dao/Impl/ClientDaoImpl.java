@@ -117,8 +117,6 @@ public class ClientDaoImpl implements ClientDao {
 
                 clients.add(client);
             }
-
-            System.out.println("Retrieved all clients successfully!");
         } catch (SQLException e) {
             System.out.println("Error retrieving clients: " + e.getMessage());
         }
