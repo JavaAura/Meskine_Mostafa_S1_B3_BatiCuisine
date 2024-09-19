@@ -16,6 +16,14 @@ public class Labor extends Component {
         this.workerProductivity = workerProductivity;
     }
 
+    public Labor() {
+        super(UUID.randomUUID(), "", ComponentType.LABOR, 0.0, UUID.randomUUID());
+        this.hourlyRate = 0.0;
+        this.workingHours = 0.0;
+        this.workerProductivity = 0.0;
+    }
+
+
     // Getters and Setters
     public double getHourlyRate() {
         return hourlyRate;
