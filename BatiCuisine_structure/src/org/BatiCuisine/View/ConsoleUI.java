@@ -1,10 +1,13 @@
 package org.BatiCuisine.View;
 
+import org.BatiCuisine.Dao.Impl.ProjectDaoImpl;
 import org.BatiCuisine.Model.Client;
 import org.BatiCuisine.Model.Project;
 import org.BatiCuisine.Repository.Impl.ClientRepositoryImpl;
 import org.BatiCuisine.Dao.Impl.ClientDaoImpl;
+import org.BatiCuisine.Repository.Impl.ProjectRepositoryImpl;
 import org.BatiCuisine.Service.ClientService;
+import org.BatiCuisine.Service.ProjectService;
 
 import java.util.Optional;
 import java.util.Scanner;
@@ -12,10 +15,10 @@ import java.util.UUID;
 
 public class ConsoleUI {
     private static final Scanner scan = new Scanner(System.in);
-    private final ClientService clientService;
+    private final ClientService clientService = new ClientService(new ClientRepositoryImpl(new ClientDaoImpl()));;
+    private final ProjectService projectService = new ProjectService(new ProjectRepositoryImpl(new ProjectDaoImpl()));;
 
     public ConsoleUI() {
-        clientService = new ClientService(new ClientRepositoryImpl(new ClientDaoImpl()));
         while (true) {
             mainMenu();
             int choice = scan.nextInt();
@@ -95,6 +98,21 @@ public class ConsoleUI {
     }
 
     public void addNewProject(Client client){
+        System.out.println("--- Creating a New Project ---");
+        System.out.print("Enter the project name: ");
+        String name = scan.nextLine();
+        System.out.print("Enter the kitchen area (in m²): ");
+        double area = scan.nextDouble();
+
+        Project project = new Project();
+        project.setProjectName(name);
+        project.setSurface(area);
+        project.setProjectStatus("In progress");
+        project.setClientID(client.getClientID());
+        addNewMaterial(project);
+    }
+
+    public void addNewMaterial(Project project){
 
     }
 
