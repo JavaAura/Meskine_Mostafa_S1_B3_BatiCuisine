@@ -15,8 +15,10 @@ import java.util.UUID;
 
 public class ConsoleUI {
     private static final Scanner scan = new Scanner(System.in);
-    private final ClientService clientService = new ClientService(new ClientRepositoryImpl(new ClientDaoImpl()));;
-    private final ProjectService projectService = new ProjectService(new ProjectRepositoryImpl(new ProjectDaoImpl()));;
+    private final ClientService clientService = new ClientService(new ClientRepositoryImpl(new ClientDaoImpl()));
+    ;
+    private final ProjectService projectService = new ProjectService(new ProjectRepositoryImpl(new ProjectDaoImpl()));
+    ;
 
     public ConsoleUI() {
         while (true) {
@@ -54,6 +56,21 @@ public class ConsoleUI {
         switch (choice) {
             case 1 -> searchClient();
             case 2 -> addNewClient();
+            default -> mainMenu();
+        }
+    }
+
+    public void materialMenu(Project project) {
+        addNewMaterial(project);
+        System.out.print("Do you want to add another material? (y/n) : ");
+        String confirmation = scan.nextLine();
+        switch (confirmation) {
+            case "y" -> addNewMaterial(project);
+            case "n" -> System.out.println("add labor");
+            default -> {
+                System.out.println("invalid input!");
+                mainMenu();
+            }
         }
     }
 
@@ -77,13 +94,13 @@ public class ConsoleUI {
         System.out.print("Enter customer name: ");
         String name = scan.nextLine();
         Optional<Client> clientOptional = clientService.getClientByName(name);
-        if(clientOptional.isPresent()){
+        if (clientOptional.isPresent()) {
             Client client = clientOptional.get();
             System.out.println("Client found!");
             System.out.println(client);
             System.out.print("Would you like to continue with this client? (y/n):");
             String choice = scan.nextLine();
-            switch (choice){
+            switch (choice) {
                 case "y" -> addNewProject(client);
                 case "n" -> clientMenu();
                 default -> {
@@ -91,13 +108,13 @@ public class ConsoleUI {
                     mainMenu();
                 }
             }
-        }else{
+        } else {
             System.out.println("no client found by the name *" + name + "* !");
             clientMenu();
         }
     }
 
-    public void addNewProject(Client client){
+    public void addNewProject(Client client) {
         System.out.println("--- Creating a New Project ---");
         System.out.print("Enter the project name: ");
         String name = scan.nextLine();
@@ -109,10 +126,10 @@ public class ConsoleUI {
         project.setSurface(area);
         project.setProjectStatus("In progress");
         project.setClientID(client.getClientID());
-        addNewMaterial(project);
+        materialMenu(project);
     }
 
-    public void addNewMaterial(Project project){
+    public void addNewMaterial(Project project) {
 
     }
 
