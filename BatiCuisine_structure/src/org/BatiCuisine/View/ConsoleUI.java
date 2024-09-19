@@ -1,22 +1,27 @@
 package org.BatiCuisine.View;
 
+import org.BatiCuisine.Dao.Impl.LaborDaoImpl;
+import org.BatiCuisine.Dao.Impl.MaterialDaoImpl;
 import org.BatiCuisine.Dao.Impl.ProjectDaoImpl;
 import org.BatiCuisine.Model.Client;
+import org.BatiCuisine.Model.Material;
 import org.BatiCuisine.Model.Project;
 import org.BatiCuisine.Repository.Impl.ClientRepositoryImpl;
 import org.BatiCuisine.Dao.Impl.ClientDaoImpl;
+import org.BatiCuisine.Repository.Impl.ComponentRepositoryImpl;
 import org.BatiCuisine.Repository.Impl.ProjectRepositoryImpl;
 import org.BatiCuisine.Service.ClientService;
+import org.BatiCuisine.Service.ComponentService;
 import org.BatiCuisine.Service.ProjectService;
 
-import java.util.Optional;
-import java.util.Scanner;
-import java.util.UUID;
+import java.util.*;
 
 public class ConsoleUI {
     private static final Scanner scan = new Scanner(System.in);
     private final ClientService clientService = new ClientService(new ClientRepositoryImpl(new ClientDaoImpl()));
     private final ProjectService projectService = new ProjectService(new ProjectRepositoryImpl(new ProjectDaoImpl()));
+    private final ComponentService componentService = new ComponentService(new ComponentRepositoryImpl(new LaborDaoImpl(), new MaterialDaoImpl()));
+    private Map<UUID, Material> materialsMap = new HashMap<>();
 
     public ConsoleUI() {
         while (true) {
@@ -59,12 +64,13 @@ public class ConsoleUI {
     }
 
     public void materialMenu(Project project) {
-        addNewMaterial(project);
-        System.out.print("Do you want to add another material? (y/n) : ");
-        String confirmation = scan.nextLine();
-        switch (confirmation) {
-            case "y" -> addNewMaterial(project);
-            case "n" -> System.out.println("add labor");
+        while(true){
+            addNewMaterial(project);
+            System.out.print("Do you want to add another material? (y/n) : ");
+            String confirmation = scan.nextLine();
+            if (!confirmation.equals("y")){
+                break;
+            }
         }
     }
 
@@ -114,6 +120,7 @@ public class ConsoleUI {
         String name = scan.nextLine();
         System.out.print("Enter the kitchen area (in m²): ");
         double area = scan.nextDouble();
+        scan.nextLine();
 
         Project project = new Project();
         project.setProjectName(name);
@@ -124,7 +131,31 @@ public class ConsoleUI {
     }
 
     public void addNewMaterial(Project project) {
+        System.out.println("--- Adding materials ---");
 
+        System.out.print("Enter the name of the material: ");
+        String name = scan.nextLine();
+
+        System.out.print("Enter the quantity of this material (in m²): ");
+        double quantity = Double.parseDouble(scan.nextLine());
+
+        System.out.print("Enter the unit cost of this material (€ / m²): ");
+        double unitCost = Double.parseDouble(scan.nextLine());
+
+        System.out.print("Enter the transport cost of this material (€): ");
+        double transportCost = Double.parseDouble(scan.nextLine());
+
+        System.out.print("Enter the quality coefficient of the material (1.0 = standard, > 1.0 = high quality): ");
+        double qualityCoefficient = Double.parseDouble(scan.nextLine());
+
+        UUID componentID = UUID.randomUUID();
+        Material material = new Material(componentID, name, 0, project.getProjectID(), transportCost, qualityCoefficient, quantity, unitCost);
+
+        materialsMap.put(componentID, material);
+
+        System.out.println("Material added successfully!");
+
+        showMaterials();
     }
 
     public void showAllProjects() {
@@ -133,5 +164,25 @@ public class ConsoleUI {
 
     public void calculateProjectCost() {
 
+    }
+
+    // this method is here only to test materials hashmap
+    public void showMaterials() {
+        System.out.println("--- Materials List ---");
+        if (materialsMap.isEmpty()) {
+            System.out.println("No materials added yet.");
+        } else {
+            for (Map.Entry<UUID, Material> entry : materialsMap.entrySet()) {
+                UUID componentID = entry.getKey();
+                Material material = entry.getValue();
+                System.out.println("ID: " + componentID +
+                        ", Name: " + material.getName() +
+                        ", Quantity: " + material.getQuantity() +
+                        ", Unit Cost: " + material.getUnitCost() +
+                        ", Transport Cost: " + material.getTransportCost() +
+                        ", Quality Coefficient: " + material.getQualityCoefficient() +
+                        ", VAT Rate: " + material.getVATRate());
+            }
+        }
     }
 }
