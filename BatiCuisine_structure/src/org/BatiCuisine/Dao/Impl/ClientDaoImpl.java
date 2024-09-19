@@ -4,10 +4,9 @@ import org.BatiCuisine.Dao.Interfaces.ClientDao;
 import org.BatiCuisine.Database.DbConnection;
 import org.BatiCuisine.Model.Client;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class ClientDaoImpl implements ClientDao {
@@ -17,7 +16,7 @@ public class ClientDaoImpl implements ClientDao {
         try (Connection conn = DbConnection.getInstance();
              PreparedStatement ps = conn.prepareStatement(query)) {
 
-            ps.setObject(1, client.getId());  // UUID
+            ps.setObject(1, client.getClientID());  // UUID
             ps.setString(2, client.getName());
             ps.setString(3, client.getAddress());
             ps.setString(4, client.getPhone());
@@ -43,7 +42,7 @@ public class ClientDaoImpl implements ClientDao {
 
             if (rs.next()) {
                 Client client = new Client();
-                client.setId(UUID.fromString(rs.getString("clientID")));
+                client.setClientID(UUID.fromString(rs.getString("clientID")));
                 client.setName(rs.getString("name"));
                 client.setAddress(rs.getString("address"));
                 client.setPhone(rs.getString("phone"));
@@ -69,7 +68,7 @@ public class ClientDaoImpl implements ClientDao {
             ps.setString(2, client.getAddress());
             ps.setString(3, client.getPhone());
             ps.setBoolean(4, client.isProfessional());
-            ps.setObject(5, client.getId());  // UUID
+            ps.setObject(5, client.getClientID());  // UUID
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
@@ -98,4 +97,33 @@ public class ClientDaoImpl implements ClientDao {
         }
         return false;
     }
+
+    @Override
+    public List<Client> getAll() {
+        List<Client> clients = new ArrayList<>();
+        String query = "SELECT * FROM clients";
+
+        try (Connection conn = DbConnection.getInstance();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                Client client = new Client();
+                client.setClientID(UUID.fromString(rs.getString("clientID")));
+                client.setName(rs.getString("name"));
+                client.setAddress(rs.getString("address"));
+                client.setPhone(rs.getString("phone"));
+                client.setProfessional(rs.getBoolean("isProfessional"));
+
+                clients.add(client);
+            }
+
+            System.out.println("Retrieved all clients successfully!");
+        } catch (SQLException e) {
+            System.out.println("Error retrieving clients: " + e.getMessage());
+        }
+
+        return clients;
+    }
+
 }

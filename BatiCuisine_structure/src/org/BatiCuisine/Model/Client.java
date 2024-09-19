@@ -3,15 +3,15 @@ package org.BatiCuisine.Model;
 import java.util.UUID;
 
 public class Client {
-    private UUID id;
+    private UUID clientID;
     private String name;
     private String address;
     private String phone;
     private boolean isProfessional;
 
     // Constructor
-    public Client(UUID id, String name, String address, String phone, boolean isProfessional) {
-        this.id = id;
+    public Client(UUID clientID, String name, String address, String phone, boolean isProfessional) {
+        this.clientID = clientID;
         this.name = name;
         this.address = address;
         this.phone = phone;
@@ -20,16 +20,16 @@ public class Client {
 
     // Default constructor
     public Client() {
-        this.id = UUID.randomUUID();
+        this.clientID = UUID.randomUUID();
     }
 
     // Getters and Setters
-    public UUID getId() {
-        return id;
+    public UUID getClientID() {
+        return clientID;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public void setClientID(UUID clientID) {
+        this.clientID = clientID;
     }
 
     public String getName() {
@@ -64,7 +64,7 @@ public class Client {
         this.isProfessional = isProfessional;
     }
 
-    // toString method (optional)
+    // toString method
     @Override
     public String toString() {
         return "Client{" +
