@@ -24,6 +24,7 @@ public class ConsoleUI {
     private final ComponentService componentService = new ComponentService(new ComponentRepositoryImpl(new LaborDaoImpl(), new MaterialDaoImpl()));
     private Map<UUID, Material> materialsMap = new HashMap<>();
     private Map<UUID, Labor> laborsMap = new HashMap<>();
+    private Project project = null;
 
     public ConsoleUI() {
         while (true) {
@@ -65,33 +66,33 @@ public class ConsoleUI {
         }
     }
 
-    public void materialMenu(Project project) {
+    public void materialMenu() {
         System.out.println("--- Adding materials ---");
         while (true) {
-            addNewMaterial(project);
+            addNewMaterial();
             System.out.print("Do you want to add another material? (y/n) : ");
             String confirmation = scan.nextLine();
             if (!confirmation.equals("y")) {
                 break;
             }
         }
-        laborMenu(project);
+        laborMenu();
     }
 
-    public void laborMenu(Project project) {
+    public void laborMenu() {
         System.out.println("--- Adding Labor (Manpower) ---");
         while (true) {
-            addNewLabor(project);
+            addNewLabor();
             System.out.print("Do you want to add another type of labor? (y/n): ");
             String confirmation = scan.nextLine();
             if (!confirmation.equals("y")) {
                 break;
             }
         }
-        taxesRate(project);
+        taxesRate();
     }
 
-    public void taxesRate(Project project) {
+    public void taxesRate() {
         System.out.println("--- Calculation of total cost ---");
         System.out.print("Would you like to apply VAT to the project? (y/n): ");
         String VatConfirmation = scan.nextLine();
@@ -101,12 +102,12 @@ public class ConsoleUI {
         System.out.print("Would you like to apply a profit margin to the project? (y/n): ");
         String marginConfirmation = scan.nextLine();
         if (marginConfirmation.equals("y")) {
-            addMargin(project);
+            addMargin();
         }
 
-        double totalCost = calculateProjectCost(project);
+        double totalCost = calculateProjectCost();
 
-        insertAll(project, totalCost);
+        insertAll(totalCost);
     }
 
     public void addNewClient() {
@@ -157,16 +158,16 @@ public class ConsoleUI {
         double area = scan.nextDouble();
         scan.nextLine();
 
-        Project project = new Project();
+        project = new Project();
         project.setProjectName(name);
         project.setSurface(area);
         project.setProjectStatus("In progress");
         project.setClientID(client.getClientID());
 
-        materialMenu(project);
+        materialMenu();
     }
 
-    public void addNewMaterial(Project project) {
+    public void addNewMaterial() {
         System.out.print("Enter the name of the material: ");
         String name = scan.nextLine();
 
@@ -199,7 +200,7 @@ public class ConsoleUI {
     }
 
 
-    public void addNewLabor(Project project) {
+    public void addNewLabor() {
         System.out.print("Enter the type of labor (e.g., Basic Worker, Specialist): ");
         String name = scan.nextLine();
 
@@ -243,13 +244,13 @@ public class ConsoleUI {
         }
     }
 
-    public void addMargin(Project project) {
+    public void addMargin() {
         System.out.print("Enter the profit margin percentage (%): ");
         double profitMargin = Double.parseDouble(scan.nextLine());
         project.setProfitMargin(profitMargin);
     }
 
-    public void insertAll(Project project, double totalCost) {
+    public void insertAll(double totalCost) {
         project.setTotalCost(totalCost);
         projectService.addProject(project);
 
@@ -272,7 +273,7 @@ public class ConsoleUI {
 
     }
 
-    public double calculateProjectCost(Project project) {
+    public double calculateProjectCost() {
         double totalMaterialCost = 0;
         double totalLaborCost = 0;
         if (!materialsMap.isEmpty()) {
