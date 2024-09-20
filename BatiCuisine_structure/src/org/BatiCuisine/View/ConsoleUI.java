@@ -273,10 +273,20 @@ public class ConsoleUI {
     }
 
     public double calculateProjectCost(Project project) {
+        double totalMaterialCost = 0;
+        double totalLaborCost = 0;
         if (!materialsMap.isEmpty()) {
             for (Map.Entry<UUID, Material> entry : materialsMap.entrySet()) {
                 Material material = entry.getValue();
                 double materialCost = material.calculateComponentCost();
+                totalMaterialCost += materialCost;
+            }
+        }
+        if (!laborsMap.isEmpty()) {
+            for (Map.Entry<UUID, Labor> entry : laborsMap.entrySet()) {
+                Labor labor = entry.getValue();
+                double laborCost = labor.calculateComponentCost();
+                totalLaborCost += laborCost;
             }
         }
         return 20000;

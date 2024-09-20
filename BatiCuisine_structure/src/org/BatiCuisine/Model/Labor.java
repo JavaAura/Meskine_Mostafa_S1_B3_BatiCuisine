@@ -51,7 +51,9 @@ public class Labor extends Component {
 
     @Override
     public double calculateComponentCost() {
-        return 0;
+        double laborCost = hourlyRate * workingHours * workerProductivity;
+        System.out.println("- "+ getName() +" : "+ laborCost +" € (hourly rate : "+ getHourlyRate() +" €/h, working hours : "+ getWorkingHours() +" h, productivity : "+ getWorkerProductivity() +")");
+        return laborCost;
     }
 
     @Override
