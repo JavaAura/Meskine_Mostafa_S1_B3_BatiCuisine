@@ -100,9 +100,11 @@ public class ConsoleUI {
         }
         System.out.print("Would you like to apply a profit margin to the project? (y/n): ");
         String marginConfirmation = scan.nextLine();
-        if (VatConfirmation.equals("y")){
+        if (marginConfirmation.equals("y")){
             addMargin(project);
         }
+
+        insertAll(project);
     }
 
     public void addNewClient() {
@@ -224,8 +226,7 @@ public class ConsoleUI {
 
     public void addVAT(){
         System.out.print("Enter the VAT percentage (%): ");
-        int VATRate = scan.nextInt();
-        scan.nextLine();
+        double VATRate = Double.parseDouble(scan.nextLine());
         if (!materialsMap.isEmpty()) {
             for (Map.Entry<UUID, Material> entry : materialsMap.entrySet()) {
                 Material material = entry.getValue();
@@ -239,6 +240,12 @@ public class ConsoleUI {
     }
 
     public void addMargin(Project project){
+        System.out.print("Enter the profit margin percentage (%): ");
+        double profitMargin = Double.parseDouble(scan.nextLine());
+        project.setProfitMargin(profitMargin);
+    }
+
+    public void insertAll(Project project){
 
     }
 
@@ -271,7 +278,7 @@ public class ConsoleUI {
         }
     }
 
-    // this method is here only to test materials hashmap
+    // this method is here only to test labors hashmap
     public void showLabors() {
         System.out.println("--- Labor List ---");
         if (laborsMap.isEmpty()) {
