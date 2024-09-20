@@ -276,7 +276,7 @@ public class ConsoleUI {
         if (!materialsMap.isEmpty()) {
             for (Map.Entry<UUID, Material> entry : materialsMap.entrySet()) {
                 Material material = entry.getValue();
-                material.calculateCost();
+                double materialCost = material.calculateComponentCost();
             }
         }
         return 20000;

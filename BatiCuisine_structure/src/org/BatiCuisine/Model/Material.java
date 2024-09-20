@@ -60,8 +60,10 @@ public class Material extends Component {
     }
 
     @Override
-    double calculateComponentCost() {
-        return 0;
+    public double calculateComponentCost() {
+        double materialCost = (quantity * unitCost * qualityCoefficient) + transportCost;
+        System.out.println("- "+ getName() +" : "+ materialCost +" € (quantity : "+ getQuantity() +" m², unit cost : "+ getUnitCost() +" €/m², quality : "+ getQualityCoefficient() +", transport : "+ getTransportCost() +" €)");
+        return materialCost;
     }
 
     @Override

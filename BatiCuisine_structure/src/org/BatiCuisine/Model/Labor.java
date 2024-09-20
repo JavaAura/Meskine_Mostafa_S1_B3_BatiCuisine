@@ -50,7 +50,7 @@ public class Labor extends Component {
     }
 
     @Override
-    double calculateComponentCost() {
+    public double calculateComponentCost() {
         return 0;
     }
 

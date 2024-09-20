@@ -24,7 +24,7 @@ public abstract class Component {
         return componentID;
     }
 
-    abstract double calculateComponentCost();
+    public abstract double calculateComponentCost();
 
     public void setComponentID(UUID componentID) {
         this.componentID = componentID;
