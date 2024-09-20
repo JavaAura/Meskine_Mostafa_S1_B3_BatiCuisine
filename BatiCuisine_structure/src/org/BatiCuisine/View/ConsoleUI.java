@@ -88,6 +88,21 @@ public class ConsoleUI {
                 break;
             }
         }
+        taxesRate(project);
+    }
+
+    public void taxesRate(Project project){
+        System.out.println("--- Calculation of total cost ---");
+        System.out.print("Would you like to apply VAT to the project? (y/n): ");
+        String VatConfirmation = scan.nextLine();
+        if (VatConfirmation.equals("y")){
+            addVAT();
+        }
+        System.out.print("Would you like to apply a profit margin to the project? (y/n): ");
+        String marginConfirmation = scan.nextLine();
+        if (VatConfirmation.equals("y")){
+            addMargin(project);
+        }
     }
 
     public void addNewClient() {
@@ -177,8 +192,6 @@ public class ConsoleUI {
         materialsMap.put(componentID, material);
 
         System.out.println("Material added successfully!");
-
-        showMaterials();
     }
 
 
@@ -207,7 +220,26 @@ public class ConsoleUI {
         laborsMap.put(componentID, labor);
 
         System.out.println("Labor added successfully!");
-        showLabors();
+    }
+
+    public void addVAT(){
+        System.out.print("Enter the VAT percentage (%): ");
+        int VATRate = scan.nextInt();
+        scan.nextLine();
+        if (!materialsMap.isEmpty()) {
+            for (Map.Entry<UUID, Material> entry : materialsMap.entrySet()) {
+                Material material = entry.getValue();
+                material.setVATRate(VATRate);
+            }
+            for (Map.Entry<UUID, Labor> entry : laborsMap.entrySet()) {
+                Labor labor = entry.getValue();
+                labor.setVATRate(VATRate);
+            }
+        }
+    }
+
+    public void addMargin(Project project){
+
     }
 
 
