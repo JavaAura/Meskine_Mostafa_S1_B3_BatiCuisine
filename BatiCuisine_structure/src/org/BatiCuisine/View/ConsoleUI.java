@@ -4,6 +4,7 @@ import org.BatiCuisine.Dao.Impl.LaborDaoImpl;
 import org.BatiCuisine.Dao.Impl.MaterialDaoImpl;
 import org.BatiCuisine.Dao.Impl.ProjectDaoImpl;
 import org.BatiCuisine.Model.Client;
+import org.BatiCuisine.Model.Labor;
 import org.BatiCuisine.Model.Material;
 import org.BatiCuisine.Model.Project;
 import org.BatiCuisine.Repository.Impl.ClientRepositoryImpl;
@@ -22,6 +23,7 @@ public class ConsoleUI {
     private final ProjectService projectService = new ProjectService(new ProjectRepositoryImpl(new ProjectDaoImpl()));
     private final ComponentService componentService = new ComponentService(new ComponentRepositoryImpl(new LaborDaoImpl(), new MaterialDaoImpl()));
     private Map<UUID, Material> materialsMap = new HashMap<>();
+    private Map<UUID, Labor> laborsMap = new HashMap<>();
 
     public ConsoleUI() {
         while (true) {
@@ -64,11 +66,25 @@ public class ConsoleUI {
     }
 
     public void materialMenu(Project project) {
-        while(true){
+        System.out.println("--- Adding materials ---");
+        while (true) {
             addNewMaterial(project);
             System.out.print("Do you want to add another material? (y/n) : ");
             String confirmation = scan.nextLine();
-            if (!confirmation.equals("y")){
+            if (!confirmation.equals("y")) {
+                break;
+            }
+        }
+        laborMenu(project);
+    }
+
+    public void laborMenu(Project project) {
+        System.out.println("--- Adding Labor (Manpower) ---");
+        while (true) {
+            addNewLabor(project);
+            System.out.print("Do you want to add another type of labor? (y/n): ");
+            String confirmation = scan.nextLine();
+            if (!confirmation.equals("y")) {
                 break;
             }
         }
@@ -127,12 +143,11 @@ public class ConsoleUI {
         project.setSurface(area);
         project.setProjectStatus("In progress");
         project.setClientID(client.getClientID());
+
         materialMenu(project);
     }
 
     public void addNewMaterial(Project project) {
-        System.out.println("--- Adding materials ---");
-
         System.out.print("Enter the name of the material: ");
         String name = scan.nextLine();
 
@@ -149,7 +164,15 @@ public class ConsoleUI {
         double qualityCoefficient = Double.parseDouble(scan.nextLine());
 
         UUID componentID = UUID.randomUUID();
-        Material material = new Material(componentID, name, 0, project.getProjectID(), transportCost, qualityCoefficient, quantity, unitCost);
+        Material material = new Material();
+
+        material.setComponentID(componentID);
+        material.setName(name);
+        material.setQuantity(quantity);
+        material.setUnitCost(unitCost);
+        material.setTransportCost(transportCost);
+        material.setQualityCoefficient(qualityCoefficient);
+        material.setProjectID(project.getProjectID());
 
         materialsMap.put(componentID, material);
 
@@ -157,6 +180,36 @@ public class ConsoleUI {
 
         showMaterials();
     }
+
+
+    public void addNewLabor(Project project) {
+        System.out.print("Enter the type of labor (e.g., Basic Worker, Specialist): ");
+        String name = scan.nextLine();
+
+        System.out.print("Enter the hourly rate for this labor (€ / h): ");
+        double hourlyRate = Double.parseDouble(scan.nextLine());
+
+        System.out.print("Enter the number of working hours: ");
+        double workingHours = Double.parseDouble(scan.nextLine());
+
+        System.out.print("Enter the productivity factor (1.0 = standard, > 1.0 = high productivity): ");
+        double workerProductivity = Double.parseDouble(scan.nextLine());
+
+        UUID componentID = UUID.randomUUID();
+        Labor labor = new Labor();
+        labor.setComponentID(componentID);
+        labor.setName(name);
+        labor.setHourlyRate(hourlyRate);
+        labor.setWorkingHours(workingHours);
+        labor.setWorkerProductivity(workerProductivity);
+        labor.setProjectID(project.getProjectID());
+
+        laborsMap.put(componentID, labor);
+
+        System.out.println("Labor added successfully!");
+        showLabors();
+    }
+
 
     public void showAllProjects() {
 
@@ -185,4 +238,24 @@ public class ConsoleUI {
             }
         }
     }
+
+    // this method is here only to test materials hashmap
+    public void showLabors() {
+        System.out.println("--- Labor List ---");
+        if (laborsMap.isEmpty()) {
+            System.out.println("No labor added yet.");
+        } else {
+            for (Map.Entry<UUID, Labor> entry : laborsMap.entrySet()) {
+                UUID componentID = entry.getKey();
+                Labor labor = entry.getValue();
+                System.out.println("ID: " + componentID +
+                        ", Name: " + labor.getName() +
+                        ", Hourly Rate: " + labor.getHourlyRate() +
+                        ", Working Hours: " + labor.getWorkingHours() +
+                        ", Worker Productivity: " + labor.getWorkerProductivity() +
+                        ", VAT Rate: " + labor.getVATRate());
+            }
+        }
+    }
+
 }
