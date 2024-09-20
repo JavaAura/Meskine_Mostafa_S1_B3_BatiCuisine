@@ -14,7 +14,7 @@ public class ProjectDaoImpl implements ProjectDao {
     @Override
     public void create(Project project) {
         String query = "INSERT INTO projects (projectID, projectName, profitMargin, totalCost, projectStatus, surface, clientID) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        Connection conn;
+        Connection conn = null;
 
         try {
             conn = DbConnection.getInstance();
@@ -31,14 +31,16 @@ public class ProjectDaoImpl implements ProjectDao {
         } catch (SQLException e) {
             System.out.println("Error creating project: " + e.getMessage());
         } finally {
-            DbConnection.closeConnection();
+            if (conn != null) {
+                DbConnection.closeConnection();
+            }
         }
     }
 
     @Override
     public Project read(UUID id) {
         String query = "SELECT * FROM projects WHERE projectID = ?";
-        Connection conn;
+        Connection conn = null;
         Project project = null;
 
         try {
@@ -62,7 +64,9 @@ public class ProjectDaoImpl implements ProjectDao {
         } catch (SQLException e) {
             System.out.println("Error retrieving project: " + e.getMessage());
         } finally {
-            DbConnection.closeConnection();
+            if (conn != null) {
+                DbConnection.closeConnection();
+            }
         }
 
         return project;
@@ -71,7 +75,7 @@ public class ProjectDaoImpl implements ProjectDao {
     @Override
     public void update(Project project) {
         String query = "UPDATE projects SET projectName = ?, profitMargin = ?, totalCost = ?, projectStatus = ?, surface = ?, clientID = ? WHERE projectID = ?";
-        Connection conn;
+        Connection conn = null;
 
         try {
             conn = DbConnection.getInstance();
@@ -89,14 +93,16 @@ public class ProjectDaoImpl implements ProjectDao {
         } catch (SQLException e) {
             System.out.println("Error updating project: " + e.getMessage());
         } finally {
-            DbConnection.closeConnection();
+            if (conn != null) {
+                DbConnection.closeConnection();
+            }
         }
     }
 
     @Override
     public boolean delete(UUID id) {
         String query = "DELETE FROM projects WHERE projectID = ?";
-        Connection conn;
+        Connection conn = null;
         boolean isDeleted = false;
 
         try {
@@ -110,7 +116,9 @@ public class ProjectDaoImpl implements ProjectDao {
         } catch (SQLException e) {
             System.out.println("Error deleting project: " + e.getMessage());
         } finally {
-            DbConnection.closeConnection();
+            if (conn != null) {
+                DbConnection.closeConnection();
+            }
         }
 
         return isDeleted;
@@ -120,7 +128,7 @@ public class ProjectDaoImpl implements ProjectDao {
     public List<Project> getAll() {
         List<Project> projects = new ArrayList<>();
         String query = "SELECT * FROM projects";
-        Connection conn;
+        Connection conn = null;
 
         try {
             conn = DbConnection.getInstance();
@@ -144,7 +152,9 @@ public class ProjectDaoImpl implements ProjectDao {
         } catch (SQLException e) {
             System.out.println("Error retrieving projects: " + e.getMessage());
         } finally {
-            DbConnection.closeConnection();
+            if (conn != null) {
+                DbConnection.closeConnection();
+            }
         }
 
         return projects;
