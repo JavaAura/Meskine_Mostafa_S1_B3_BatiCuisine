@@ -232,6 +232,8 @@ public class ConsoleUI {
                 Material material = entry.getValue();
                 material.setVATRate(VATRate);
             }
+        }
+        if (!laborsMap.isEmpty()){
             for (Map.Entry<UUID, Labor> entry : laborsMap.entrySet()) {
                 Labor labor = entry.getValue();
                 labor.setVATRate(VATRate);
@@ -246,6 +248,7 @@ public class ConsoleUI {
     }
 
     public void insertAll(Project project){
+        projectService.addProject(project);
 
     }
 
