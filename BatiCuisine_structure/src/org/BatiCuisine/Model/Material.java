@@ -60,6 +60,11 @@ public class Material extends Component {
     }
 
     @Override
+    double calculateComponentCost() {
+        return 0;
+    }
+
+    @Override
     public String toString() {
         return "Material{" +
                 "transportCost=" + transportCost +

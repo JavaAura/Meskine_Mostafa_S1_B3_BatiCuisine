@@ -33,7 +33,7 @@ public class ConsoleUI {
             switch (choice) {
                 case 1 -> clientMenu();
                 case 2 -> showAllProjects();
-                case 3 -> calculateProjectCost();
+//                case 3 -> calculateProjectCost();
                 default -> {
                     return;
                 }
@@ -104,7 +104,7 @@ public class ConsoleUI {
             addMargin(project);
         }
 
-        double totalCost = calculateProjectCost();
+        double totalCost = calculateProjectCost(project);
 
         insertAll(project, totalCost);
     }
@@ -272,7 +272,13 @@ public class ConsoleUI {
 
     }
 
-    public double calculateProjectCost() {
+    public double calculateProjectCost(Project project) {
+        if (!materialsMap.isEmpty()) {
+            for (Map.Entry<UUID, Material> entry : materialsMap.entrySet()) {
+                Material material = entry.getValue();
+                material.calculateCost();
+            }
+        }
         return 20000;
     }
 
