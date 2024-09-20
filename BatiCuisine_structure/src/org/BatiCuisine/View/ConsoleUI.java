@@ -91,20 +91,22 @@ public class ConsoleUI {
         taxesRate(project);
     }
 
-    public void taxesRate(Project project){
+    public void taxesRate(Project project) {
         System.out.println("--- Calculation of total cost ---");
         System.out.print("Would you like to apply VAT to the project? (y/n): ");
         String VatConfirmation = scan.nextLine();
-        if (VatConfirmation.equals("y")){
+        if (VatConfirmation.equals("y")) {
             addVAT();
         }
         System.out.print("Would you like to apply a profit margin to the project? (y/n): ");
         String marginConfirmation = scan.nextLine();
-        if (marginConfirmation.equals("y")){
+        if (marginConfirmation.equals("y")) {
             addMargin(project);
         }
 
-        insertAll(project);
+        double totalCost = calculateProjectCost();
+
+        insertAll(project, totalCost);
     }
 
     public void addNewClient() {
@@ -224,7 +226,7 @@ public class ConsoleUI {
         System.out.println("Labor added successfully!");
     }
 
-    public void addVAT(){
+    public void addVAT() {
         System.out.print("Enter the VAT percentage (%): ");
         double VATRate = Double.parseDouble(scan.nextLine());
         if (!materialsMap.isEmpty()) {
@@ -233,7 +235,7 @@ public class ConsoleUI {
                 material.setVATRate(VATRate);
             }
         }
-        if (!laborsMap.isEmpty()){
+        if (!laborsMap.isEmpty()) {
             for (Map.Entry<UUID, Labor> entry : laborsMap.entrySet()) {
                 Labor labor = entry.getValue();
                 labor.setVATRate(VATRate);
@@ -241,15 +243,28 @@ public class ConsoleUI {
         }
     }
 
-    public void addMargin(Project project){
+    public void addMargin(Project project) {
         System.out.print("Enter the profit margin percentage (%): ");
         double profitMargin = Double.parseDouble(scan.nextLine());
         project.setProfitMargin(profitMargin);
     }
 
-    public void insertAll(Project project){
+    public void insertAll(Project project, double totalCost) {
+        project.setTotalCost(totalCost);
         projectService.addProject(project);
 
+        if (!materialsMap.isEmpty()) {
+            for (Map.Entry<UUID, Material> entry : materialsMap.entrySet()) {
+                Material material = entry.getValue();
+                componentService.addComponent(material);
+            }
+        }
+        if (!laborsMap.isEmpty()) {
+            for (Map.Entry<UUID, Labor> entry : laborsMap.entrySet()) {
+                Labor labor = entry.getValue();
+                componentService.addComponent(labor);
+            }
+        }
     }
 
 
@@ -257,8 +272,8 @@ public class ConsoleUI {
 
     }
 
-    public void calculateProjectCost() {
-
+    public double calculateProjectCost() {
+        return 20000;
     }
 
     // this method is here only to test materials hashmap

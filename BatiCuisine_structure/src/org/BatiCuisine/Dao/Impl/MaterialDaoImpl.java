@@ -13,19 +13,20 @@ public class MaterialDaoImpl implements MaterialDao {
 
     @Override
     public void create(Material material) {
-        String query = "INSERT INTO materials (componentID, name, VAT_rate, transportCost, qualityCoefficient, quantity, unitCost, projectID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO materials (componentID, name, componentType, VAT_rate, transportCost, qualityCoefficient, quantity, unitCost, projectID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Connection conn = null;
         try {
             conn = DbConnection.getInstance();
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setObject(1, material.getComponentID());
             ps.setString(2, material.getName());
-            ps.setDouble(3, material.getVATRate());
-            ps.setDouble(4, material.getTransportCost());
-            ps.setDouble(5, material.getQualityCoefficient());
-            ps.setDouble(6, material.getQuantity());
-            ps.setDouble(7, material.getUnitCost());
-            ps.setObject(8, material.getProjectID());
+            ps.setObject(3, material.getComponentType(), Types.OTHER);
+            ps.setDouble(4, material.getVATRate());
+            ps.setDouble(5, material.getTransportCost());
+            ps.setDouble(6, material.getQualityCoefficient());
+            ps.setDouble(7, material.getQuantity());
+            ps.setDouble(8, material.getUnitCost());
+            ps.setObject(9, material.getProjectID());
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error creating material: " + e.getMessage());
@@ -68,19 +69,20 @@ public class MaterialDaoImpl implements MaterialDao {
 
     @Override
     public void update(Material material) {
-        String query = "UPDATE materials SET name = ?, VAT_rate = ?, transportCost = ?, qualityCoefficient = ?, quantity = ?, unitCost = ?, projectID = ? WHERE componentID = ?";
+        String query = "UPDATE materials SET name = ?, componentType = ?, VAT_rate = ?, transportCost = ?, qualityCoefficient = ?, quantity = ?, unitCost = ?, projectID = ? WHERE componentID = ?";
         Connection conn = null;
         try {
             conn = DbConnection.getInstance();
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setString(1, material.getName());
-            ps.setDouble(2, material.getVATRate());
-            ps.setDouble(3, material.getTransportCost());
-            ps.setDouble(4, material.getQualityCoefficient());
-            ps.setDouble(5, material.getQuantity());
-            ps.setDouble(6, material.getUnitCost());
-            ps.setObject(7, material.getProjectID());
-            ps.setObject(8, material.getComponentID());
+            ps.setObject(2, material.getComponentType(), Types.OTHER);
+            ps.setDouble(3, material.getVATRate());
+            ps.setDouble(4, material.getTransportCost());
+            ps.setDouble(5, material.getQualityCoefficient());
+            ps.setDouble(6, material.getQuantity());
+            ps.setDouble(7, material.getUnitCost());
+            ps.setObject(8, material.getProjectID());
+            ps.setObject(9, material.getComponentID());
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error updating material: " + e.getMessage());

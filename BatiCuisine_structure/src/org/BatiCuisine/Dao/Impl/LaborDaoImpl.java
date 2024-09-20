@@ -13,18 +13,19 @@ public class LaborDaoImpl implements LaborDao {
 
     @Override
     public void create(Labor labor) {
-        String query = "INSERT INTO labors (componentID, name, VAT_rate, hourlyRate, workingHours, workerProductivity, projectID) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO labors (componentID, name, componentType, VAT_rate, hourlyRate, workingHours, workerProductivity, projectID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         Connection conn = null;
         try {
             conn = DbConnection.getInstance();
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setObject(1, labor.getComponentID());
             ps.setString(2, labor.getName());
-            ps.setDouble(3, labor.getVATRate());
-            ps.setDouble(4, labor.getHourlyRate());
-            ps.setDouble(5, labor.getWorkingHours());
-            ps.setDouble(6, labor.getWorkerProductivity());
-            ps.setObject(7, labor.getProjectID());
+            ps.setObject(3, labor.getComponentType(), Types.OTHER);
+            ps.setDouble(4, labor.getVATRate());
+            ps.setDouble(5, labor.getHourlyRate());
+            ps.setDouble(6, labor.getWorkingHours());
+            ps.setDouble(7, labor.getWorkerProductivity());
+            ps.setObject(8, labor.getProjectID());
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error creating labor: " + e.getMessage());
@@ -66,18 +67,19 @@ public class LaborDaoImpl implements LaborDao {
 
     @Override
     public void update(Labor labor) {
-        String query = "UPDATE labors SET name = ?, VAT_rate = ?, hourlyRate = ?, workingHours = ?, workerProductivity = ?, projectID = ? WHERE componentID = ?";
+        String query = "UPDATE labors SET name = ?, componentType = ?, VAT_rate = ?, hourlyRate = ?, workingHours = ?, workerProductivity = ?, projectID = ? WHERE componentID = ?";
         Connection conn = null;
         try {
             conn = DbConnection.getInstance();
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setString(1, labor.getName());
-            ps.setDouble(2, labor.getVATRate());
-            ps.setDouble(3, labor.getHourlyRate());
-            ps.setDouble(4, labor.getWorkingHours());
-            ps.setDouble(5, labor.getWorkerProductivity());
-            ps.setObject(6, labor.getProjectID());
-            ps.setObject(7, labor.getComponentID());
+            ps.setObject(2, labor.getComponentType(), Types.OTHER);
+            ps.setDouble(3, labor.getVATRate());
+            ps.setDouble(4, labor.getHourlyRate());
+            ps.setDouble(5, labor.getWorkingHours());
+            ps.setDouble(6, labor.getWorkerProductivity());
+            ps.setObject(7, labor.getProjectID());
+            ps.setObject(8, labor.getComponentID());
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error updating labor: " + e.getMessage());

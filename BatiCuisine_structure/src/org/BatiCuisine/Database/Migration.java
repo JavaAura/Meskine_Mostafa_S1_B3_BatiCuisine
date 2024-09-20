@@ -39,7 +39,7 @@ public class Migration {
     public static void createProjectTable(Connection conn) {
         Statement statement;
         try {
-            String query = "CREATE TYPE projectStatus AS ENUM ('In progress', 'Finished', 'Canceled');";
+            String query = "CREATE TYPE projectStatus AS ENUM ('IN PROGRESS', 'FINISHED', 'CANCELED');";
             statement = conn.createStatement();
             statement.execute(query);  // Create enum first
 
@@ -48,7 +48,7 @@ public class Migration {
                     + "projectName VARCHAR(100) NOT NULL, "
                     + "profitMargin DOUBLE PRECISION, "
                     + "totalCost DOUBLE PRECISION, "
-                    + "projectStatus projectStatus DEFAULT 'In progress', "
+                    + "projectStatus projectStatus DEFAULT 'IN PROGRESS', "
                     + "surface DOUBLE PRECISION, "
                     + "clientID UUID REFERENCES clients(clientID))";
             statement.execute(query);
@@ -79,7 +79,7 @@ public class Migration {
     public static void createComponentTable(Connection conn) {
         Statement statement;
         try {
-            String query = "CREATE TYPE componentType AS ENUM ('Labor', 'Material');";
+            String query = "CREATE TYPE componentType AS ENUM ('LABOR', 'MATERIAL');";
             statement = conn.createStatement();
             statement.execute(query);  // Create enum first
 
