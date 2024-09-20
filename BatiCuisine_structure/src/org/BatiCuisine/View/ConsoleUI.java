@@ -25,6 +25,7 @@ public class ConsoleUI {
     private Map<UUID, Material> materialsMap = new HashMap<>();
     private Map<UUID, Labor> laborsMap = new HashMap<>();
     private Project project = null;
+    private Client client = null;
 
     public ConsoleUI() {
         while (true) {
@@ -120,9 +121,9 @@ public class ConsoleUI {
         System.out.print("Is the client a professional? (true/false): ");
         boolean isProfessional = scan.nextBoolean();
 
-        Client client = new Client(UUID.randomUUID(), name, address, phone, isProfessional);
+        client = new Client(UUID.randomUUID(), name, address, phone, isProfessional);
         clientService.addClient(client);
-        addNewProject(client);
+        addNewProject();
     }
 
     public void searchClient() {
@@ -131,13 +132,13 @@ public class ConsoleUI {
         String name = scan.nextLine();
         Optional<Client> clientOptional = clientService.getClientByName(name);
         if (clientOptional.isPresent()) {
-            Client client = clientOptional.get();
+             client = clientOptional.get();
             System.out.println("Client found!");
             System.out.println(client);
             System.out.print("Would you like to continue with this client? (y/n):");
             String choice = scan.nextLine();
             switch (choice) {
-                case "y" -> addNewProject(client);
+                case "y" -> addNewProject();
                 case "n" -> clientMenu();
                 default -> {
                     System.out.println("invalid input!");
@@ -150,7 +151,7 @@ public class ConsoleUI {
         }
     }
 
-    public void addNewProject(Client client) {
+    public void addNewProject() {
         System.out.println("--- Creating a New Project ---");
         System.out.print("Enter the project name: ");
         String name = scan.nextLine();
