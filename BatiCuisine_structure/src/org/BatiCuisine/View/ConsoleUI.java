@@ -277,7 +277,6 @@ public class ConsoleUI {
     public double calculateProjectCost() {
         double totalMaterialCost = 0;
         double totalLaborCost = 0;
-        double totalCost = 0;
         double vatRate = 0;
         double profitMarginRate = project.getProfitMargin();
 
@@ -289,19 +288,7 @@ public class ConsoleUI {
         System.out.println("--- Cost Detail ---");
 
         if (!materialsMap.isEmpty()) {
-            System.out.println("1. Materials:");
-            for (Map.Entry<UUID, Material> entry : materialsMap.entrySet()) {
-                Material material = entry.getValue();
-                double materialCost = material.calculateComponentCost();
-                totalMaterialCost += materialCost;
-                vatRate = material.getVATRate();
-            }
-            System.out.println("**Total cost of materials before VAT : "+ totalMaterialCost +" €**");
-            if(vatRate > 0){
-                totalMaterialCost = costAfterVAT(totalMaterialCost, vatRate);
-                System.out.println("**Total cost of materials after VAT : "+ totalMaterialCost +" €**");
-            }
-
+            totalMaterialCost = calculateMaterialCost();
         }
 
         if (!laborsMap.isEmpty()) {
@@ -319,7 +306,7 @@ public class ConsoleUI {
             }
         }
 
-        totalCost = totalMaterialCost + totalLaborCost;
+        double totalCost = totalMaterialCost + totalLaborCost;
 
 
         if(profitMarginRate > 0){
@@ -330,6 +317,25 @@ public class ConsoleUI {
         }
 
         return totalCost;
+    }
+
+    public double calculateMaterialCost(){
+        double totalMaterialCost = 0;
+        double vatRate = 0;
+        System.out.println("1. Materials:");
+        for (Map.Entry<UUID, Material> entry : materialsMap.entrySet()) {
+            Material material = entry.getValue();
+            double materialCost = material.calculateComponentCost();
+            totalMaterialCost += materialCost;
+            vatRate = material.getVATRate();
+        }
+        System.out.println("**Total cost of materials before VAT : "+ totalMaterialCost +" €**");
+        if(vatRate > 0){
+            totalMaterialCost = costAfterVAT(totalMaterialCost, vatRate);
+            System.out.println("**Total cost of materials after VAT : "+ totalMaterialCost +" €**");
+        }
+
+        return totalMaterialCost;
     }
 
     public double costAfterVAT(double totalCost, double vatRate){
