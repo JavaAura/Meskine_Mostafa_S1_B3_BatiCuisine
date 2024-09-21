@@ -277,7 +277,9 @@ public class ConsoleUI {
     public double calculateProjectCost() {
         double totalMaterialCost = 0;
         double totalLaborCost = 0;
+        double totalCost = 0;
         double vatRate = 0;
+        double profitMarginRate = project.getProfitMargin();
 
         System.out.println("--- Calculation Result ---");
         System.out.println("Project Name : " + project.getProjectName());
@@ -301,6 +303,7 @@ public class ConsoleUI {
             }
 
         }
+
         if (!laborsMap.isEmpty()) {
             System.out.println("2. Labor:");
             for (Map.Entry<UUID, Labor> entry : laborsMap.entrySet()) {
@@ -315,7 +318,18 @@ public class ConsoleUI {
                 System.out.println("**Total cost of labors after VAT : "+ totalLaborCost +" €**");
             }
         }
-        return 20000;
+
+        totalCost = totalMaterialCost + totalLaborCost;
+
+
+        if(profitMarginRate > 0){
+            System.out.println("3. Total cost before profit margin: "+ totalCost +" €");
+            double profitMargin = totalCost * (profitMarginRate/100) ;
+            System.out.println("4. Profit margin ("+ profitMarginRate +"%): "+ profitMargin +" €");
+            totalCost += profitMargin;
+        }
+
+        return totalCost;
     }
 
     public double costAfterVAT(double totalCost, double vatRate){
