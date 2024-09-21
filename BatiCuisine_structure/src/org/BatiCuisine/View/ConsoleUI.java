@@ -307,8 +307,13 @@ public class ConsoleUI {
                 Labor labor = entry.getValue();
                 double laborCost = labor.calculateComponentCost();
                 totalLaborCost += laborCost;
+                vatRate = labor.getVATRate();
             }
-            System.out.println("Total labor cost with VAT (20%):");
+            System.out.println("**Total cost of labors before VAT : "+ totalLaborCost +" €**");
+            if(vatRate > 0){
+                totalLaborCost = costAfterVAT(totalLaborCost, vatRate);
+                System.out.println("**Total cost of labors after VAT : "+ totalLaborCost +" €**");
+            }
         }
         return 20000;
     }
