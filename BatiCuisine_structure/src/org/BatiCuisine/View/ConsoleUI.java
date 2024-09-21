@@ -277,21 +277,44 @@ public class ConsoleUI {
     public double calculateProjectCost() {
         double totalMaterialCost = 0;
         double totalLaborCost = 0;
+        double vatRate = 0;
+
+        System.out.println("--- Calculation Result ---");
+        System.out.println("Project Name : " + project.getProjectName());
+        System.out.println("Client : " + client.getName());
+        System.out.println("Address : " + client.getAddress());
+        System.out.println("Surface : " + project.getSurface() + "  m²");
+        System.out.println("--- Cost Detail ---");
+
         if (!materialsMap.isEmpty()) {
+            System.out.println("1. Materials:");
             for (Map.Entry<UUID, Material> entry : materialsMap.entrySet()) {
                 Material material = entry.getValue();
                 double materialCost = material.calculateComponentCost();
                 totalMaterialCost += materialCost;
+                vatRate = material.getVATRate();
             }
+            System.out.println("**Total cost of materials before VAT : "+ totalMaterialCost +" €**");
+            if(vatRate > 0){
+                totalMaterialCost = costAfterVAT(totalMaterialCost, vatRate);
+                System.out.println("**Total cost of materials after VAT : "+ totalMaterialCost +" €**");
+            }
+
         }
         if (!laborsMap.isEmpty()) {
+            System.out.println("2. Labor:");
             for (Map.Entry<UUID, Labor> entry : laborsMap.entrySet()) {
                 Labor labor = entry.getValue();
                 double laborCost = labor.calculateComponentCost();
                 totalLaborCost += laborCost;
             }
+            System.out.println("Total labor cost with VAT (20%):");
         }
         return 20000;
+    }
+
+    public double costAfterVAT(double totalCost, double vatRate){
+        return totalCost * (1 + vatRate / 100);
     }
 
     // this method is here only to test materials hashmap
