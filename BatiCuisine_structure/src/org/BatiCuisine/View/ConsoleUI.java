@@ -333,12 +333,20 @@ public class ConsoleUI {
 
         double totalCost = totalMaterialCost + totalLaborCost;
 
-
         if(profitMarginRate > 0){
             System.out.println("3. Total cost before profit margin: "+ totalCost +" €");
             double profitMargin = totalCost * (profitMarginRate/100) ;
             System.out.println("4. Profit margin ("+ profitMarginRate +"%): "+ profitMargin +" €");
             totalCost += profitMargin;
+        }
+
+        if (client.isProfessional()) {
+            System.out.print("Enter the discount percentage (%): ");
+            double discount = Double.parseDouble(scan.nextLine());
+            double discountAmount = totalCost * (discount/100);
+            System.out.println("5. Total cost before discount: "+ totalCost +" €");
+            System.out.println("6. Discount amount ("+ discountAmount +"%): "+ discountAmount +" €");
+            totalCost = totalCost - discountAmount;
         }
 
         System.out.println("**Total final cost of the project : "+ totalCost +" €**");
