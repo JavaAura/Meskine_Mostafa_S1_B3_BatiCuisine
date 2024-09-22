@@ -2,7 +2,6 @@ package org.BatiCuisine.Dao.Impl;
 
 import org.BatiCuisine.Dao.Interfaces.ProjectDao;
 import org.BatiCuisine.Model.Project;
-import org.BatiCuisine.Database.DbConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
