@@ -1,5 +1,6 @@
 package org.BatiCuisine.Repository.Impl;
 
+import org.BatiCuisine.Dao.Interfaces.QuoteDao;
 import org.BatiCuisine.Model.Quote;
 import org.BatiCuisine.Repository.Interfaces.QuoteRepository;
 

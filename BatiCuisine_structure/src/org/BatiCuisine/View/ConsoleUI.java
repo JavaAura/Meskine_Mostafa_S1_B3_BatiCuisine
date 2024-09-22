@@ -1,22 +1,20 @@
 package org.BatiCuisine.View;
 
-import org.BatiCuisine.Dao.Impl.LaborDaoImpl;
-import org.BatiCuisine.Dao.Impl.MaterialDaoImpl;
-import org.BatiCuisine.Dao.Impl.ProjectDaoImpl;
+import org.BatiCuisine.Dao.Impl.*;
 import org.BatiCuisine.Database.DbConnection;
-import org.BatiCuisine.Model.Client;
-import org.BatiCuisine.Model.Labor;
-import org.BatiCuisine.Model.Material;
-import org.BatiCuisine.Model.Project;
+import org.BatiCuisine.Model.*;
 import org.BatiCuisine.Repository.Impl.ClientRepositoryImpl;
-import org.BatiCuisine.Dao.Impl.ClientDaoImpl;
 import org.BatiCuisine.Repository.Impl.ComponentRepositoryImpl;
 import org.BatiCuisine.Repository.Impl.ProjectRepositoryImpl;
+import org.BatiCuisine.Repository.Impl.QuoteRepositoryImpl;
 import org.BatiCuisine.Service.ClientService;
 import org.BatiCuisine.Service.ComponentService;
 import org.BatiCuisine.Service.ProjectService;
+import org.BatiCuisine.Service.QuoteService;
 
 import java.sql.Connection;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ConsoleUI {
@@ -25,6 +23,7 @@ public class ConsoleUI {
     private final ClientService clientService = new ClientService(new ClientRepositoryImpl(new ClientDaoImpl(connection)));
     private final ProjectService projectService = new ProjectService(new ProjectRepositoryImpl(new ProjectDaoImpl(connection)));
     private final ComponentService componentService = new ComponentService(new ComponentRepositoryImpl(new LaborDaoImpl(connection), new MaterialDaoImpl(connection)));
+    private final QuoteService quoteService = new QuoteService(new QuoteRepositoryImpl(new QuoteDaoImpl(connection)));
     private Map<UUID, Material> materialsMap = new HashMap<>();
     private Map<UUID, Labor> laborsMap = new HashMap<>();
     private Project project = null;
@@ -271,6 +270,42 @@ public class ConsoleUI {
         }
     }
 
+    public void saveQuote(){
+        Quote quote = new Quote();
+        System.out.println("--- Quote Registration ---");
+        // this is here for testing only
+        System.out.println("Enter the date the quote was issued (format: dd/MM/yyyy): ");
+        String dateInput = scan.nextLine();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        try {
+            Date issueDate = dateFormat.parse(dateInput);
+            quote.setIssueDate(issueDate);
+        } catch (ParseException e) {
+            System.out.println("Invalid date format. Please enter the date in dd/MM/yyyy format.");
+        }
+
+        System.out.println("Enter the validity date of the quote (format: dd/mm/yyyy): ");
+        String dateInput2 = scan.nextLine();
+
+        try {
+            Date validityDate = dateFormat.parse(dateInput2);
+            quote.setValidityDate(validityDate);
+        } catch (ParseException e) {
+            System.out.println("Invalid date format. Please enter the date in dd/MM/yyyy format.");
+        }
+
+        // end section
+        quote.setEstimatedAmount(project.getTotalCost());
+        quote.setProject(project);
+
+        System.out.println("Would you like to save the quote? (y/n) : ");
+        String confirmation = scan.nextLine();
+        if (confirmation.equals("y")){
+            quoteService.addQuote(quote);
+        }
+
+    }
 
     public void showAllProjects() {
 

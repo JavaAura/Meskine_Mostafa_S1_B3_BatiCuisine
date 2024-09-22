@@ -9,18 +9,19 @@ public class Quote {
     private Date issueDate;
     private Date validityDate;
     private boolean isAccepted;
-    private UUID projectID;
+    private Project project;
 
     public Quote() {
+        this.quoteID = UUID.randomUUID();
     }
 
-    public Quote(UUID quoteID, double estimatedAmount, Date issueDate, Date validityDate, boolean isAccepted, UUID projectID) {
+    public Quote(UUID quoteID, double estimatedAmount, Date issueDate, Date validityDate, boolean isAccepted, Project project) {
         this.quoteID = quoteID;
         this.estimatedAmount = estimatedAmount;
         this.issueDate = issueDate;
         this.validityDate = validityDate;
         this.isAccepted = isAccepted;
-        this.projectID = projectID;
+        this.project = project;
     }
 
     public UUID getQuoteID() {
@@ -63,12 +64,12 @@ public class Quote {
         isAccepted = accepted;
     }
 
-    public UUID getProjectID() {
-        return projectID;
+    public Project getProject() {
+        return project;
     }
 
-    public void setProjectID(UUID projectID) {
-        this.projectID = projectID;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     @Override
@@ -79,7 +80,7 @@ public class Quote {
                 ", issueDate=" + issueDate +
                 ", validityDate=" + validityDate +
                 ", isAccepted=" + isAccepted +
-                ", projectID=" + projectID +
+                ", projectID=" + project.getProjectID() +
                 '}';
     }
 }
