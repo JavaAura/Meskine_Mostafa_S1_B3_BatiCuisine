@@ -10,14 +10,16 @@ import java.util.List;
 import java.util.UUID;
 
 public class LaborDaoImpl implements LaborDao {
+    private final Connection connection;
+
+    public LaborDaoImpl(Connection connection) {
+        this.connection = connection;
+    }
 
     @Override
     public void create(Labor labor) {
         String query = "INSERT INTO labors (componentID, name, componentType, VAT_rate, hourlyRate, workingHours, workerProductivity, projectID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        Connection conn = null;
-        try {
-            conn = DbConnection.getInstance();
-            PreparedStatement ps = conn.prepareStatement(query);
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setObject(1, labor.getComponentID());
             ps.setString(2, labor.getName());
             ps.setObject(3, labor.getComponentType(), Types.OTHER);
@@ -29,21 +31,14 @@ public class LaborDaoImpl implements LaborDao {
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error creating labor: " + e.getMessage());
-        } finally {
-            if (conn != null) {
-                DbConnection.closeConnection();
-            }
         }
     }
 
     @Override
     public Labor read(UUID id) {
         String query = "SELECT * FROM labors WHERE componentID = ?";
-        Connection conn = null;
         Labor labor = new Labor();
-        try {
-            conn = DbConnection.getInstance();
-            PreparedStatement ps = conn.prepareStatement(query);
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setObject(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -57,10 +52,6 @@ public class LaborDaoImpl implements LaborDao {
             }
         } catch (SQLException e) {
             System.out.println("Error reading labor: " + e.getMessage());
-        } finally {
-            if (conn != null) {
-                DbConnection.closeConnection();
-            }
         }
         return labor;
     }
@@ -68,10 +59,7 @@ public class LaborDaoImpl implements LaborDao {
     @Override
     public void update(Labor labor) {
         String query = "UPDATE labors SET name = ?, componentType = ?, VAT_rate = ?, hourlyRate = ?, workingHours = ?, workerProductivity = ?, projectID = ? WHERE componentID = ?";
-        Connection conn = null;
-        try {
-            conn = DbConnection.getInstance();
-            PreparedStatement ps = conn.prepareStatement(query);
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setString(1, labor.getName());
             ps.setObject(2, labor.getComponentType(), Types.OTHER);
             ps.setDouble(3, labor.getVATRate());
@@ -83,30 +71,19 @@ public class LaborDaoImpl implements LaborDao {
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error updating labor: " + e.getMessage());
-        } finally {
-            if (conn != null) {
-                DbConnection.closeConnection();
-            }
         }
     }
 
     @Override
     public boolean delete(UUID id) {
         String query = "DELETE FROM labors WHERE componentID = ?";
-        Connection conn = null;
         boolean isDeleted = false;
-        try {
-            conn = DbConnection.getInstance();
-            PreparedStatement ps = conn.prepareStatement(query);
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setObject(1, id);
             int rowsDeleted = ps.executeUpdate();
             isDeleted = rowsDeleted > 0;
         } catch (SQLException e) {
             System.out.println("Error deleting labor: " + e.getMessage());
-        } finally {
-            if (conn != null) {
-                DbConnection.closeConnection();
-            }
         }
         return isDeleted;
     }
@@ -115,11 +92,8 @@ public class LaborDaoImpl implements LaborDao {
     public List<Labor> getAll() {
         List<Labor> labors = new ArrayList<>();
         String query = "SELECT * FROM labors";
-        Connection conn = null;
-        try {
-            conn = DbConnection.getInstance();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
                 Labor labor = new Labor();
                 labor.setComponentID(UUID.fromString(rs.getString("componentID")));
@@ -133,11 +107,8 @@ public class LaborDaoImpl implements LaborDao {
             }
         } catch (SQLException e) {
             System.out.println("Error retrieving all labors: " + e.getMessage());
-        } finally {
-            if (conn != null) {
-                DbConnection.closeConnection();
-            }
         }
         return labors;
     }
 }
+

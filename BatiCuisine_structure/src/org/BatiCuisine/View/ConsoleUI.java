@@ -3,6 +3,7 @@ package org.BatiCuisine.View;
 import org.BatiCuisine.Dao.Impl.LaborDaoImpl;
 import org.BatiCuisine.Dao.Impl.MaterialDaoImpl;
 import org.BatiCuisine.Dao.Impl.ProjectDaoImpl;
+import org.BatiCuisine.Database.DbConnection;
 import org.BatiCuisine.Model.Client;
 import org.BatiCuisine.Model.Labor;
 import org.BatiCuisine.Model.Material;
@@ -15,13 +16,15 @@ import org.BatiCuisine.Service.ClientService;
 import org.BatiCuisine.Service.ComponentService;
 import org.BatiCuisine.Service.ProjectService;
 
+import java.sql.Connection;
 import java.util.*;
 
 public class ConsoleUI {
+    private final Connection connection = DbConnection.getInstance();
     private static final Scanner scan = new Scanner(System.in);
-    private final ClientService clientService = new ClientService(new ClientRepositoryImpl(new ClientDaoImpl()));
-    private final ProjectService projectService = new ProjectService(new ProjectRepositoryImpl(new ProjectDaoImpl()));
-    private final ComponentService componentService = new ComponentService(new ComponentRepositoryImpl(new LaborDaoImpl(), new MaterialDaoImpl()));
+    private final ClientService clientService = new ClientService(new ClientRepositoryImpl(new ClientDaoImpl(connection)));
+    private final ProjectService projectService = new ProjectService(new ProjectRepositoryImpl(new ProjectDaoImpl(connection)));
+    private final ComponentService componentService = new ComponentService(new ComponentRepositoryImpl(new LaborDaoImpl(connection), new MaterialDaoImpl(connection)));
     private Map<UUID, Material> materialsMap = new HashMap<>();
     private Map<UUID, Labor> laborsMap = new HashMap<>();
     private Project project = null;

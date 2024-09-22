@@ -10,14 +10,16 @@ import java.util.List;
 import java.util.UUID;
 
 public class MaterialDaoImpl implements MaterialDao {
+    private final Connection connection;
+
+    public MaterialDaoImpl(Connection connection) {
+        this.connection = connection;
+    }
 
     @Override
     public void create(Material material) {
         String query = "INSERT INTO materials (componentID, name, componentType, VAT_rate, transportCost, qualityCoefficient, quantity, unitCost, projectID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        Connection conn = null;
-        try {
-            conn = DbConnection.getInstance();
-            PreparedStatement ps = conn.prepareStatement(query);
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setObject(1, material.getComponentID());
             ps.setString(2, material.getName());
             ps.setObject(3, material.getComponentType(), Types.OTHER);
@@ -30,21 +32,14 @@ public class MaterialDaoImpl implements MaterialDao {
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error creating material: " + e.getMessage());
-        } finally {
-            if (conn != null) {
-                DbConnection.closeConnection();
-            }
         }
     }
 
     @Override
     public Material read(UUID id) {
         String query = "SELECT * FROM materials WHERE componentID = ?";
-        Connection conn = null;
         Material material = new Material();
-        try {
-            conn = DbConnection.getInstance();
-            PreparedStatement ps = conn.prepareStatement(query);
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setObject(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -59,10 +54,6 @@ public class MaterialDaoImpl implements MaterialDao {
             }
         } catch (SQLException e) {
             System.out.println("Error reading material: " + e.getMessage());
-        } finally {
-            if (conn != null) {
-                DbConnection.closeConnection();
-            }
         }
         return material;
     }
@@ -70,10 +61,7 @@ public class MaterialDaoImpl implements MaterialDao {
     @Override
     public void update(Material material) {
         String query = "UPDATE materials SET name = ?, componentType = ?, VAT_rate = ?, transportCost = ?, qualityCoefficient = ?, quantity = ?, unitCost = ?, projectID = ? WHERE componentID = ?";
-        Connection conn = null;
-        try {
-            conn = DbConnection.getInstance();
-            PreparedStatement ps = conn.prepareStatement(query);
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setString(1, material.getName());
             ps.setObject(2, material.getComponentType(), Types.OTHER);
             ps.setDouble(3, material.getVATRate());
@@ -86,30 +74,19 @@ public class MaterialDaoImpl implements MaterialDao {
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error updating material: " + e.getMessage());
-        } finally {
-            if (conn != null) {
-                DbConnection.closeConnection();
-            }
         }
     }
 
     @Override
     public boolean delete(UUID id) {
         String query = "DELETE FROM materials WHERE componentID = ?";
-        Connection conn = null;
         boolean isDeleted = false;
-        try {
-            conn = DbConnection.getInstance();
-            PreparedStatement ps = conn.prepareStatement(query);
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setObject(1, id);
             int rowsDeleted = ps.executeUpdate();
             isDeleted = rowsDeleted > 0;
         } catch (SQLException e) {
             System.out.println("Error deleting material: " + e.getMessage());
-        } finally {
-            if (conn != null) {
-                DbConnection.closeConnection();
-            }
         }
         return isDeleted;
     }
@@ -118,11 +95,8 @@ public class MaterialDaoImpl implements MaterialDao {
     public List<Material> getAll() {
         List<Material> materials = new ArrayList<>();
         String query = "SELECT * FROM materials";
-        Connection conn = null;
-        try {
-            conn = DbConnection.getInstance();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
                 Material material = new Material();
                 material.setComponentID(UUID.fromString(rs.getString("componentID")));
@@ -137,11 +111,8 @@ public class MaterialDaoImpl implements MaterialDao {
             }
         } catch (SQLException e) {
             System.out.println("Error retrieving all materials: " + e.getMessage());
-        } finally {
-            if (conn != null) {
-                DbConnection.closeConnection();
-            }
         }
         return materials;
     }
 }
+

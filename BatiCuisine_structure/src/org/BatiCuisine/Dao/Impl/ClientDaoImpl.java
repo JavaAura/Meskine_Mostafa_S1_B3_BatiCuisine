@@ -1,7 +1,6 @@
 package org.BatiCuisine.Dao.Impl;
 
 import org.BatiCuisine.Dao.Interfaces.ClientDao;
-import org.BatiCuisine.Database.DbConnection;
 import org.BatiCuisine.Model.Client;
 
 import java.sql.*;
@@ -10,11 +9,16 @@ import java.util.List;
 import java.util.UUID;
 
 public class ClientDaoImpl implements ClientDao {
+    private final Connection connection;
+
+    public ClientDaoImpl(Connection connection) {
+        this.connection = connection;
+    }
+
     @Override
     public void create(Client client) {
         String query = "INSERT INTO clients (clientID, name, address, phone, isProfessional) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = DbConnection.getInstance();
-             PreparedStatement ps = conn.prepareStatement(query)) {
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
 
             ps.setObject(1, client.getClientID());  // UUID
             ps.setString(2, client.getName());
@@ -34,8 +38,7 @@ public class ClientDaoImpl implements ClientDao {
     @Override
     public Client read(UUID id) {
         String query = "SELECT * FROM clients WHERE clientID = ?";
-        try (Connection conn = DbConnection.getInstance();
-             PreparedStatement ps = conn.prepareStatement(query)) {
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
 
             ps.setObject(1, id);  // UUID
             ResultSet rs = ps.executeQuery();
@@ -61,8 +64,7 @@ public class ClientDaoImpl implements ClientDao {
     @Override
     public void update(Client client) {
         String query = "UPDATE clients SET name = ?, address = ?, phone = ?, isProfessional = ? WHERE clientID = ?";
-        try (Connection conn = DbConnection.getInstance();
-             PreparedStatement ps = conn.prepareStatement(query)) {
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
 
             ps.setString(1, client.getName());
             ps.setString(2, client.getAddress());
@@ -82,8 +84,7 @@ public class ClientDaoImpl implements ClientDao {
     @Override
     public boolean delete(UUID id) {
         String query = "DELETE FROM clients WHERE clientID = ?";
-        try (Connection conn = DbConnection.getInstance();
-             PreparedStatement ps = conn.prepareStatement(query)) {
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
 
             ps.setObject(1, id);  // UUID
 
@@ -103,8 +104,7 @@ public class ClientDaoImpl implements ClientDao {
         List<Client> clients = new ArrayList<>();
         String query = "SELECT * FROM clients";
 
-        try (Connection conn = DbConnection.getInstance();
-             Statement stmt = conn.createStatement();
+        try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
@@ -123,5 +123,5 @@ public class ClientDaoImpl implements ClientDao {
 
         return clients;
     }
-
 }
+
