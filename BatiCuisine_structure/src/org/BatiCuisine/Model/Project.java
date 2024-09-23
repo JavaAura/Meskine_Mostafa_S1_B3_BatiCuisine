@@ -86,6 +86,19 @@ public class Project {
         this.client = client;
     }
 
+    public void showDetails() {
+        System.out.println("*******************************");
+        System.out.println("       Project Details         ");
+        System.out.println("*******************************");
+        System.out.println("Project Name: " + projectName);
+        System.out.println("Surface: " + surface + " m²");
+        System.out.println("Profit Margin: " + profitMargin);
+        System.out.println("Total Cost: " + totalCost);
+        System.out.println("Project Status: " + projectStatus);
+        System.out.println("Client Name: " + client.getName());
+    }
+
+
     @Override
     public String toString() {
         return "Project{" +

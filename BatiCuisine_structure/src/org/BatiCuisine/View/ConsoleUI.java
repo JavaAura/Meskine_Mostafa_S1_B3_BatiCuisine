@@ -305,11 +305,13 @@ public class ConsoleUI {
         if (confirmation.equals("y")){
             quoteService.addQuote(quote);
         }
-
     }
 
     public void showAllProjects() {
         List<Project> projects = projectService.getAllProjects();
+        for (Project project: projects){
+            project.showDetails();
+        }
     }
 
     public void calculateProjectCost() {

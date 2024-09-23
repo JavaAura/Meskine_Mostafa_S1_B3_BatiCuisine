@@ -1,6 +1,5 @@
 package org.BatiCuisine.Dao.Impl;
 
-import org.BatiCuisine.Dao.Interfaces.ClientDao;
 import org.BatiCuisine.Dao.Interfaces.ProjectDao;
 import org.BatiCuisine.Enum.ProjectStatus;
 import org.BatiCuisine.Model.Client;
