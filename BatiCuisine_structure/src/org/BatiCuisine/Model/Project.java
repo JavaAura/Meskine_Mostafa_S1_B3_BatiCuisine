@@ -1,5 +1,7 @@
 package org.BatiCuisine.Model;
 
+import org.BatiCuisine.Enum.ProjectStatus;
+
 import java.util.UUID;
 
 public class Project {
@@ -7,12 +9,12 @@ public class Project {
     private String projectName;
     private double profitMargin;
     private double totalCost;
-    private String projectStatus; // !!!!!!!!!I need to use Enum after
+    private ProjectStatus projectStatus;
     private double surface;
     private Client client;
 
     // Constructors
-    public Project(UUID projectID, String projectName, double profitMargin, double totalCost, String projectStatus, double surface, Client client) {
+    public Project(UUID projectID, String projectName, double profitMargin, double totalCost, ProjectStatus projectStatus, double surface, Client client) {
         this.projectID = projectID;
         this.projectName = projectName;
         this.profitMargin = profitMargin;
@@ -60,11 +62,11 @@ public class Project {
         this.totalCost = totalCost;
     }
 
-    public String getProjectStatus() {
+    public ProjectStatus getProjectStatus() {
         return projectStatus;
     }
 
-    public void setProjectStatus(String projectStatus) {
+    public void setProjectStatus(ProjectStatus projectStatus) {
         this.projectStatus = projectStatus;
     }
 

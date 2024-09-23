@@ -165,7 +165,7 @@ public class ConsoleUI {
         project.setProjectName(name);
         project.setSurface(area);
         project.setProjectStatus("In progress");
-        project.setClientID(client.getClientID());
+        project.setClient(client);
 
         materialMenu();
     }
@@ -294,8 +294,8 @@ public class ConsoleUI {
         } catch (ParseException e) {
             System.out.println("Invalid date format. Please enter the date in dd/MM/yyyy format.");
         }
-
         // end section
+
         quote.setEstimatedAmount(project.getTotalCost());
         quote.setProject(project);
 
@@ -308,7 +308,7 @@ public class ConsoleUI {
     }
 
     public void showAllProjects() {
-
+        List<Project> projects = projectService.getAllProjects();
     }
 
     public void calculateProjectCost() {
@@ -318,8 +318,8 @@ public class ConsoleUI {
 
         System.out.println("--- Calculation Result ---");
         System.out.println("Project Name : " + project.getProjectName());
-        System.out.println("Client : " + client.getName());
-        System.out.println("Address : " + client.getAddress());
+        System.out.println("Client : " + project.getClient().getName());
+        System.out.println("Address : " + project.getClient().getAddress());
         System.out.println("Surface : " + project.getSurface() + "  m²");
         System.out.println("--- Cost Detail ---");
 
@@ -341,9 +341,8 @@ public class ConsoleUI {
         }
 
         if (client.isProfessional()) {
-            System.out.print("Enter the discount percentage (%): ");
-            double discount = Double.parseDouble(scan.nextLine());
-            double discountAmount = totalCost * (discount/100);
+            double discount = 0.1;
+            double discountAmount = totalCost * discount;
             System.out.println("5. Total cost before discount: "+ totalCost +" €");
             System.out.println("6. Discount amount ("+ discountAmount +"%): "+ discountAmount +" €");
             totalCost = totalCost - discountAmount;

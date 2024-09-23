@@ -1,6 +1,9 @@
 package org.BatiCuisine.Dao.Impl;
 
+import org.BatiCuisine.Dao.Interfaces.ClientDao;
 import org.BatiCuisine.Dao.Interfaces.ProjectDao;
+import org.BatiCuisine.Enum.ProjectStatus;
+import org.BatiCuisine.Model.Client;
 import org.BatiCuisine.Model.Project;
 
 import java.sql.*;
@@ -23,15 +26,17 @@ public class ProjectDaoImpl implements ProjectDao {
             ps.setString(2, project.getProjectName());
             ps.setDouble(3, project.getProfitMargin());
             ps.setDouble(4, project.getTotalCost());
-            ps.setString(5, project.getProjectStatus());
+            ps.setString(5, project.getProjectStatus().name());
             ps.setDouble(6, project.getSurface());
-            ps.setObject(7, project.getClientID());
+            ps.setObject(7, project.getClient().getClientID());
+
             ps.executeUpdate();
             System.out.println("Project created successfully!");
         } catch (SQLException e) {
             System.out.println("Error creating project: " + e.getMessage());
         }
     }
+
 
     @Override
     public Project read(UUID id) {
@@ -46,9 +51,19 @@ public class ProjectDaoImpl implements ProjectDao {
                 project.setProjectName(rs.getString("projectName"));
                 project.setProfitMargin(rs.getDouble("profitMargin"));
                 project.setTotalCost(rs.getDouble("totalCost"));
-                project.setProjectStatus(rs.getString("projectStatus"));
+
+                String status = rs.getString("projectStatus");
+                ProjectStatus projectStatus = ProjectStatus.fromString(status);
+                project.setProjectStatus(projectStatus);
+
                 project.setSurface(rs.getDouble("surface"));
-                project.setClientID(UUID.fromString(rs.getString("clientID")));
+
+                // get client object
+                UUID clientID = UUID.fromString(rs.getString("clientID"));
+                ClientDaoImpl clientDAO = new ClientDaoImpl(connection);
+                Client client = clientDAO.read(clientID);
+
+                project.setClient(client);
             }
             System.out.println("Project retrieved successfully!");
         } catch (SQLException e) {
@@ -57,6 +72,7 @@ public class ProjectDaoImpl implements ProjectDao {
         return project;
     }
 
+
     @Override
     public void update(Project project) {
         String query = "UPDATE projects SET projectName = ?, profitMargin = ?, totalCost = ?, projectStatus = ?, surface = ?, clientID = ? WHERE projectID = ?";
@@ -64,9 +80,10 @@ public class ProjectDaoImpl implements ProjectDao {
             ps.setString(1, project.getProjectName());
             ps.setDouble(2, project.getProfitMargin());
             ps.setDouble(3, project.getTotalCost());
-            ps.setString(4, project.getProjectStatus());
+            ps.setString(4, project.getProjectStatus().name());
             ps.setDouble(5, project.getSurface());
-            ps.setObject(6, project.getClientID());
+            ps.setObject(6, project.getClient().getClientID());
+
             ps.setObject(7, project.getProjectID());
             ps.executeUpdate();
             System.out.println("Project updated successfully!");
@@ -74,6 +91,7 @@ public class ProjectDaoImpl implements ProjectDao {
             System.out.println("Error updating project: " + e.getMessage());
         }
     }
+
 
     @Override
     public boolean delete(UUID id) {
@@ -102,9 +120,18 @@ public class ProjectDaoImpl implements ProjectDao {
                 project.setProjectName(rs.getString("projectName"));
                 project.setProfitMargin(rs.getDouble("profitMargin"));
                 project.setTotalCost(rs.getDouble("totalCost"));
-                project.setProjectStatus(rs.getString("projectStatus"));
+                String status = rs.getString("projectStatus");
+
+                ProjectStatus projectStatus = ProjectStatus.fromString(status);
+                project.setProjectStatus(projectStatus);
+
                 project.setSurface(rs.getDouble("surface"));
-                project.setClientID(UUID.fromString(rs.getString("clientID")));
+
+                UUID clientID = UUID.fromString(rs.getString("clientID"));
+                ClientDaoImpl clientDAO = new ClientDaoImpl(connection);
+                Client client = clientDAO.read(clientID);
+                project.setClient(client);
+
                 projects.add(project);
             }
             System.out.println("Retrieved all projects successfully!");
