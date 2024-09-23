@@ -38,7 +38,7 @@ public class ConsoleUI {
             switch (choice) {
                 case 1 -> clientMenu();
                 case 2 -> showAllProjects();
-//                case 3 -> calculateProjectCost();
+                case 3 -> selectProject();
                 default -> {
                     return;
                 }
@@ -196,7 +196,7 @@ public class ConsoleUI {
         material.setUnitCost(unitCost);
         material.setTransportCost(transportCost);
         material.setQualityCoefficient(qualityCoefficient);
-        material.setProjectID(project.getProjectID());
+        material.setProject(project);
 
         materialsMap.put(componentID, material);
 
@@ -224,7 +224,7 @@ public class ConsoleUI {
         labor.setHourlyRate(hourlyRate);
         labor.setWorkingHours(workingHours);
         labor.setWorkerProductivity(workerProductivity);
-        labor.setProjectID(project.getProjectID());
+        labor.setProject(project);
 
         laborsMap.put(componentID, labor);
 
@@ -269,6 +269,8 @@ public class ConsoleUI {
                 componentService.addComponent(labor);
             }
         }
+
+        saveQuote();
     }
 
     public void saveQuote(){
@@ -307,7 +309,36 @@ public class ConsoleUI {
         }
     }
 
-    public void showAllProjects() {
+    public void selectProject() {
+        List<Project> projects = projectService.getAllProjects();
+
+        System.out.println("Available Projects:");
+        for (int i = 0; i < projects.size(); i++) {
+            System.out.println("project index : " + i);
+            System.out.println("project : " + projects.get(i).getProjectName());
+            System.out.println("client : " + projects.get(i).getClient().getName());
+            System.out.println("*******************************");
+        }
+
+        System.out.print("Please choose a project by entering the index: ");
+        int selectedIndex = -1;
+
+        try {
+            selectedIndex = scan.nextInt();
+            if (selectedIndex >= 0 && selectedIndex < projects.size()) {
+                Project selectedProject = projects.get(selectedIndex);
+                System.out.println("calculating Cost:");
+                project = selectedProject;
+                calculateProjectCost();
+            } else {
+                System.out.println("Invalid index. Please choose a valid index.");
+            }
+        } catch (Exception e) {
+            System.out.println("Invalid input. Please enter a number.");
+        }
+    }
+
+    public void showAllProjects(){
         List<Project> projects = projectService.getAllProjects();
         for (Project project: projects){
             project.showDetails();
@@ -337,18 +368,11 @@ public class ConsoleUI {
         double totalCost = totalMaterialCost + totalLaborCost;
 
         if(profitMarginRate > 0){
-            System.out.println("3. Total cost before profit margin: "+ totalCost +" €");
-            double profitMargin = totalCost * (profitMarginRate/100) ;
-            System.out.println("4. Profit margin ("+ profitMarginRate +"%): "+ profitMargin +" €");
-            totalCost += profitMargin;
+            totalCost = calculateProfitMargin(totalCost, profitMarginRate);
         }
 
         if (client.isProfessional()) {
-            double discount = 0.1;
-            double discountAmount = totalCost * discount;
-            System.out.println("5. Total cost before discount: "+ totalCost +" €");
-            System.out.println("6. Discount amount ("+ discountAmount +"%): "+ discountAmount +" €");
-            totalCost = totalCost - discountAmount;
+            totalCost = calculateDiscount(totalCost);
         }
 
         System.out.println("**Total final cost of the project : "+ totalCost +" €**");
@@ -393,6 +417,21 @@ public class ConsoleUI {
         }
 
         return totalLaborCost;
+    }
+
+    public double calculateProfitMargin(double totalCost, double profitMarginRate){
+        System.out.println("3. Total cost before profit margin: "+ totalCost +" €");
+        double profitMargin = totalCost * (profitMarginRate/100) ;
+        System.out.println("4. Profit margin ("+ profitMarginRate +"%): "+ profitMargin +" €");
+        return (totalCost + profitMargin);
+    }
+
+    public double calculateDiscount(double totalCost){
+        double discount = 0.1;
+        double discountAmount = totalCost * discount;
+        System.out.println("5. Total cost before discount: "+ totalCost +" €");
+        System.out.println("6. Discount amount ("+ discountAmount +"%): "+ discountAmount +" €");
+        return (totalCost - discountAmount);
     }
 
     public double costAfterVAT(double totalCost, double vatRate){

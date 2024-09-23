@@ -9,14 +9,14 @@ public abstract class Component {
     private String name;
     private ComponentType componentType;
     private double VATRate;
-    private UUID projectID;
+    private Project project;
 
-    public Component(UUID componentID, String name, ComponentType componentType, double VATRate, UUID projectID) {
+    public Component(UUID componentID, String name, ComponentType componentType, double VATRate, Project project) {
         this.componentID = componentID;
         this.name = name;
         this.componentType = componentType;
         this.VATRate = VATRate;
-        this.projectID = projectID;
+        this.project = project;
     }
 
     // Getters and Setters
@@ -26,8 +26,8 @@ public abstract class Component {
 
     public abstract double calculateComponentCost();
 
-    public void setComponentID(UUID componentID) {
-        this.componentID = componentID;
+    public void setComponentID(UUID component) {
+        this.componentID = component;
     }
 
     public String getName() {
@@ -54,12 +54,12 @@ public abstract class Component {
         this.VATRate = VATRate;
     }
 
-    public UUID getProjectID() {
-        return projectID;
+    public Project getProject() {
+        return project;
     }
 
-    public void setProjectID(UUID projectID) {
-        this.projectID = projectID;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     @Override
@@ -69,7 +69,7 @@ public abstract class Component {
                 ", name='" + name + '\'' +
                 ", componentType=" + componentType +
                 ", VATRate=" + VATRate +
-                ", projectID=" + projectID +
+                ", projectID=" + project.getProjectID() +
                 '}';
     }
 }

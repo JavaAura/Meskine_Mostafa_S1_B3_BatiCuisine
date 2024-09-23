@@ -15,4 +15,6 @@ public interface ComponentRepository {
     boolean removeComponent(UUID componentID);
 
     List<Component> getAllComponents();
+
+    public List<Component> getProjectComponents(UUID projectID);
 }

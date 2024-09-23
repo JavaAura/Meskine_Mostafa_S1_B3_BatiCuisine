@@ -32,4 +32,8 @@ public class ComponentService {
     public boolean removeComponent(UUID componentID) {
         return componentRepository.removeComponent(componentID);
     }
+
+    public List<Component> getProjectComponents(UUID projectID){
+        return componentRepository.getProjectComponents(projectID);
+    }
 }

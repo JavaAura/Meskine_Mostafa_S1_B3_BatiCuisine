@@ -11,6 +11,7 @@ import org.BatiCuisine.Repository.Interfaces.ComponentRepository;
 import java.util.List;
 import java.util.UUID;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class ComponentRepositoryImpl implements ComponentRepository {
 
@@ -69,5 +70,17 @@ public class ComponentRepositoryImpl implements ComponentRepository {
             removed = materialDao.delete(componentID);
         }
         return removed;
+    }
+
+    public List<Component> getProjectComponents(UUID projectID) {
+        List<Component> components = new ArrayList<>();
+        components.addAll(materialDao.getAll());
+        components.addAll(laborDao.getAll());
+
+        components = components.stream()
+                .filter(component->component.getProject().getProjectID() == projectID)
+                .toList();
+
+        return components;
     }
 }
