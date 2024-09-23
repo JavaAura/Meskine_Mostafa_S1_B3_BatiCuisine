@@ -2,6 +2,7 @@ package org.BatiCuisine.View;
 
 import org.BatiCuisine.Dao.Impl.*;
 import org.BatiCuisine.Database.DbConnection;
+import org.BatiCuisine.Enum.ProjectStatus;
 import org.BatiCuisine.Model.*;
 import org.BatiCuisine.Repository.Impl.ClientRepositoryImpl;
 import org.BatiCuisine.Repository.Impl.ComponentRepositoryImpl;
@@ -164,7 +165,7 @@ public class ConsoleUI {
         project = new Project();
         project.setProjectName(name);
         project.setSurface(area);
-        project.setProjectStatus("In progress");
+        project.setProjectStatus(ProjectStatus.IN_PROGRESS);
         project.setClient(client);
 
         materialMenu();
