@@ -9,17 +9,17 @@ public class Project {
     private double totalCost;
     private String projectStatus; // !!!!!!!!!I need to use Enum after
     private double surface;
-    private UUID clientID;
+    private Client client;
 
     // Constructors
-    public Project(UUID projectID, String projectName, double profitMargin, double totalCost, String projectStatus, double surface, UUID clientID) {
+    public Project(UUID projectID, String projectName, double profitMargin, double totalCost, String projectStatus, double surface, Client client) {
         this.projectID = projectID;
         this.projectName = projectName;
         this.profitMargin = profitMargin;
         this.totalCost = totalCost;
         this.projectStatus = projectStatus;
         this.surface = surface;
-        this.clientID = clientID;
+        this.client = client;
     }
 
     // Default constructor
@@ -76,12 +76,12 @@ public class Project {
         this.surface = surface;
     }
 
-    public UUID getClientID() {
-        return clientID;
+    public Client getClient() {
+        return client;
     }
 
-    public void setClientID(UUID clientID) {
-        this.clientID = clientID;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
     @Override
