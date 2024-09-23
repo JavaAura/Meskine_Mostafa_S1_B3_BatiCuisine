@@ -2,6 +2,7 @@ package org.BatiCuisine.View;
 
 import org.BatiCuisine.Dao.Impl.*;
 import org.BatiCuisine.Database.DbConnection;
+import org.BatiCuisine.Enum.ComponentType;
 import org.BatiCuisine.Enum.ProjectStatus;
 import org.BatiCuisine.Model.*;
 import org.BatiCuisine.Repository.Impl.ClientRepositoryImpl;
@@ -38,7 +39,11 @@ public class ConsoleUI {
             switch (choice) {
                 case 1 -> clientMenu();
                 case 2 -> showAllProjects();
-                case 3 -> selectProject();
+                case 3 -> {
+                    selectProject();
+                    getProjectComponets();
+                    calculateProjectCost();
+                }
                 default -> {
                     return;
                 }
@@ -335,6 +340,18 @@ public class ConsoleUI {
             }
         } catch (Exception e) {
             System.out.println("Invalid input. Please enter a number.");
+        }
+    }
+
+    public void getProjectComponets(){
+        List<Component> components = componentService.getProjectComponents(project.getProjectID());
+        for(Component component: components){
+            if (component.getComponentType() == ComponentType.MATERIAL){
+                materialsMap.put(component.getComponentID(), (Material) component);
+            }
+            if (component.getComponentType() == ComponentType.MATERIAL){
+                laborsMap.put(component.getComponentID(), (Labor) component);
+            }
         }
     }
 
