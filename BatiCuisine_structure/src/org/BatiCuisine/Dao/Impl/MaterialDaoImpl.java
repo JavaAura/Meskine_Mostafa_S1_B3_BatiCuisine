@@ -2,6 +2,7 @@ package org.BatiCuisine.Dao.Impl;
 
 import org.BatiCuisine.Dao.Interfaces.MaterialDao;
 import org.BatiCuisine.Model.Material;
+import org.BatiCuisine.Model.Project;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class MaterialDaoImpl implements MaterialDao {
             ps.setDouble(6, material.getQualityCoefficient());
             ps.setDouble(7, material.getQuantity());
             ps.setDouble(8, material.getUnitCost());
-            ps.setObject(9, material.getProjectID());
+            ps.setObject(9, material.getProject().getProjectID());
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error creating material: " + e.getMessage());
@@ -49,7 +50,11 @@ public class MaterialDaoImpl implements MaterialDao {
                 material.setQualityCoefficient(rs.getDouble("qualityCoefficient"));
                 material.setQuantity(rs.getDouble("quantity"));
                 material.setUnitCost(rs.getDouble("unitCost"));
-                material.setProjectID(UUID.fromString(rs.getString("projectID")));
+
+                UUID projectID = UUID.fromString(rs.getString("projectID"));
+                ProjectDaoImpl projectDao = new ProjectDaoImpl(connection);
+                Project project = projectDao.read(projectID);
+                material.setProject(project);
             }
         } catch (SQLException e) {
             System.out.println("Error reading material: " + e.getMessage());
@@ -68,7 +73,7 @@ public class MaterialDaoImpl implements MaterialDao {
             ps.setDouble(5, material.getQualityCoefficient());
             ps.setDouble(6, material.getQuantity());
             ps.setDouble(7, material.getUnitCost());
-            ps.setObject(8, material.getProjectID());
+            ps.setObject(8, material.getProject().getProjectID());
             ps.setObject(9, material.getComponentID());
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -105,7 +110,12 @@ public class MaterialDaoImpl implements MaterialDao {
                 material.setQualityCoefficient(rs.getDouble("qualityCoefficient"));
                 material.setQuantity(rs.getDouble("quantity"));
                 material.setUnitCost(rs.getDouble("unitCost"));
-                material.setProjectID(UUID.fromString(rs.getString("projectID")));
+
+                UUID projectID = UUID.fromString(rs.getString("projectID"));
+                ProjectDaoImpl projectDao = new ProjectDaoImpl(connection);
+                Project project = projectDao.read(projectID);
+                material.setProject(project);
+
                 materials.add(material);
             }
         } catch (SQLException e) {
