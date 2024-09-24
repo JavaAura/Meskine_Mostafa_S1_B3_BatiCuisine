@@ -10,10 +10,6 @@ public interface ComponentRepository {
 
     Component getComponentById(UUID componentID);
 
-    void updateComponent(Component component);
-
-    boolean removeComponent(UUID componentID);
-
     List<Component> getAllComponents();
 
     public List<Component> getProjectComponents(UUID projectID);

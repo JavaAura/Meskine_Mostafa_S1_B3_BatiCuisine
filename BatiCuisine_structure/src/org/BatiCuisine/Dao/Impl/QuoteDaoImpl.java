@@ -75,21 +75,6 @@ public class QuoteDaoImpl implements QuoteDao {
     }
 
     @Override
-    public boolean delete(UUID id) {
-        String query = "DELETE FROM quotes WHERE quoteID = ?";
-        boolean isDeleted = false;
-        try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setObject(1, id);
-            int rowsAffected = ps.executeUpdate();
-            isDeleted = rowsAffected > 0;
-            System.out.println("Quote deleted successfully!");
-        } catch (SQLException e) {
-            System.out.println("Error deleting quote: " + e.getMessage());
-        }
-        return isDeleted;
-    }
-
-    @Override
     public List<Quote> getAll() {
         List<Quote> quotes = new ArrayList<>();
         String query = "SELECT * FROM quotes";

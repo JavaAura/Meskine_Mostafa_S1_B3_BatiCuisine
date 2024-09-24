@@ -59,44 +59,6 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
-    public void update(Client client) {
-        String query = "UPDATE clients SET name = ?, address = ?, phone = ?, isProfessional = ? WHERE clientID = ?";
-        try (PreparedStatement ps = connection.prepareStatement(query)) {
-
-            ps.setString(1, client.getName());
-            ps.setString(2, client.getAddress());
-            ps.setString(3, client.getPhone());
-            ps.setBoolean(4, client.isProfessional());
-            ps.setObject(5, client.getClientID());  // UUID
-
-            int rowsAffected = ps.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("Client updated successfully!");
-            }
-        } catch (SQLException e) {
-            System.out.println("Error updating client: " + e.getMessage());
-        }
-    }
-
-    @Override
-    public boolean delete(UUID id) {
-        String query = "DELETE FROM clients WHERE clientID = ?";
-        try (PreparedStatement ps = connection.prepareStatement(query)) {
-
-            ps.setObject(1, id);  // UUID
-
-            int rowsAffected = ps.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("Client deleted successfully!");
-                return true;
-            }
-        } catch (SQLException e) {
-            System.out.println("Error deleting client: " + e.getMessage());
-        }
-        return false;
-    }
-
-    @Override
     public List<Client> getAll() {
         List<Client> clients = new ArrayList<>();
         String query = "SELECT * FROM clients";

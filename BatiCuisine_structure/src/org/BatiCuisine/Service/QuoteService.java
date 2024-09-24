@@ -28,10 +28,6 @@ public class QuoteService {
         quoteRepository.updateQuote(quote);
     }
 
-    public boolean removeQuote(UUID quoteId) {
-        return quoteRepository.removeQuote(quoteId);
-    }
-
     public List<Quote> getAllQuotes() {
         return quoteRepository.getAllQuotes();
     }

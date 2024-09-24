@@ -25,14 +25,6 @@ public class ComponentService {
         return componentRepository.getAllComponents();
     }
 
-    public void updateComponent(Component component) {
-        componentRepository.updateComponent(component);
-    }
-
-    public boolean removeComponent(UUID componentID) {
-        return componentRepository.removeComponent(componentID);
-    }
-
     public List<Component> getProjectComponents(UUID projectID){
         return componentRepository.getProjectComponents(projectID);
     }

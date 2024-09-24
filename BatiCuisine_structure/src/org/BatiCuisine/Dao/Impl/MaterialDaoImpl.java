@@ -60,39 +60,6 @@ public class MaterialDaoImpl implements MaterialDao {
     }
 
     @Override
-    public void update(Material material) {
-        String query = "UPDATE materials SET name = ?, componentType = ?, VAT_rate = ?, transportCost = ?, qualityCoefficient = ?, quantity = ?, unitCost = ?, projectID = ? WHERE componentID = ?";
-        try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setString(1, material.getName());
-            ps.setObject(2, material.getComponentType(), Types.OTHER);
-            ps.setDouble(3, material.getVATRate());
-            ps.setDouble(4, material.getTransportCost());
-            ps.setDouble(5, material.getQualityCoefficient());
-            ps.setDouble(6, material.getQuantity());
-            ps.setDouble(7, material.getUnitCost());
-            ps.setObject(8, material.getProject().getProjectID());
-            ps.setObject(9, material.getComponentID());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Error updating material: " + e.getMessage());
-        }
-    }
-
-    @Override
-    public boolean delete(UUID id) {
-        String query = "DELETE FROM materials WHERE componentID = ?";
-        boolean isDeleted = false;
-        try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setObject(1, id);
-            int rowsDeleted = ps.executeUpdate();
-            isDeleted = rowsDeleted > 0;
-        } catch (SQLException e) {
-            System.out.println("Error deleting material: " + e.getMessage());
-        }
-        return isDeleted;
-    }
-
-    @Override
     public List<Material> getAll() {
         List<Material> materials = new ArrayList<>();
         String query = "SELECT * FROM materials";

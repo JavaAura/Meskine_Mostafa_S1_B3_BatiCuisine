@@ -27,16 +27,6 @@ public class ClientRepositoryImpl implements ClientRepository {
     }
 
     @Override
-    public void updateClient(Client client) {
-        clientDao.update(client);
-    }
-
-    @Override
-    public boolean removeClient(UUID id) {
-        return clientDao.delete(id);
-    }
-
-    @Override
     public List<Client> getAllClients() {
         return clientDao.getAll();
     }

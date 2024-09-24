@@ -22,14 +22,6 @@ public class ProjectService {
         return projectRepository.getProjectById(projectId);
     }
 
-    public void updateProject(Project project) {
-        projectRepository.updateProject(project);
-    }
-
-    public boolean removeProject(UUID projectId) {
-        return projectRepository.removeProject(projectId);
-    }
-
     public List<Project> getAllProjects() {
         return projectRepository.getAllProjects();
     }

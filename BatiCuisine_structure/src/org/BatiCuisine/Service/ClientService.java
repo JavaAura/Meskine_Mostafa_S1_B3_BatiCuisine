@@ -22,14 +22,6 @@ public class ClientService {
         return clientRepository.getClientById(id);
     }
 
-    public void updateClient(Client client) {
-        clientRepository.updateClient(client);
-    }
-
-    public boolean removeClient(UUID id) {
-        return clientRepository.removeClient(id);
-    }
-
     public List<Client> getAllClients() {
         return clientRepository.getAllClients();
     }

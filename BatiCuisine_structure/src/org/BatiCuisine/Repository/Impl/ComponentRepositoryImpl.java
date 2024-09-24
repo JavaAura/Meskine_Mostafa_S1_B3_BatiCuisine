@@ -51,27 +51,6 @@ public class ComponentRepositoryImpl implements ComponentRepository {
         return components;
     }
 
-    @Override
-    public void updateComponent(Component component) {
-        if (component.getComponentType() == ComponentType.LABOR) {
-            laborDao.update((Labor) component);
-        }
-
-        if (component.getComponentType() == ComponentType.MATERIAL) {
-            materialDao.update((Material) component);
-        }
-    }
-
-
-    @Override
-    public boolean removeComponent(UUID componentID) {
-        boolean removed = laborDao.delete(componentID);
-        if (!removed) {
-            removed = materialDao.delete(componentID);
-        }
-        return removed;
-    }
-
     public List<Component> getProjectComponents(UUID projectID) {
         List<Component> components = new ArrayList<>();
 

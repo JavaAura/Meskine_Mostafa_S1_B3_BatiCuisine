@@ -10,9 +10,5 @@ public interface ProjectRepository {
 
     Project getProjectById(UUID id);
 
-    void updateProject(Project project);
-
-    boolean removeProject(UUID id);
-
     List<Project> getAllProjects();
 }

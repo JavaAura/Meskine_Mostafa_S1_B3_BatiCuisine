@@ -32,11 +32,6 @@ public class QuoteRepositoryImpl implements QuoteRepository {
     }
 
     @Override
-    public boolean removeQuote(UUID id) {
-        return quoteDao.delete(id);
-    }
-
-    @Override
     public List<Quote> getAllQuotes() {
         return quoteDao.getAll();
     }

@@ -68,42 +68,6 @@ public class ProjectDaoImpl implements ProjectDao {
         return project;
     }
 
-
-    @Override
-    public void update(Project project) {
-        String query = "UPDATE projects SET projectName = ?, profitMargin = ?, totalCost = ?, projectStatus = ?, surface = ?, clientID = ? WHERE projectID = ?";
-        try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setString(1, project.getProjectName());
-            ps.setDouble(2, project.getProfitMargin());
-            ps.setDouble(3, project.getTotalCost());
-            ps.setString(4, project.getProjectStatus().name());
-            ps.setDouble(5, project.getSurface());
-            ps.setObject(6, project.getClient().getClientID());
-
-            ps.setObject(7, project.getProjectID());
-            ps.executeUpdate();
-            System.out.println("Project updated successfully!");
-        } catch (SQLException e) {
-            System.out.println("Error updating project: " + e.getMessage());
-        }
-    }
-
-
-    @Override
-    public boolean delete(UUID id) {
-        String query = "DELETE FROM projects WHERE projectID = ?";
-        boolean isDeleted = false;
-        try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setObject(1, id);
-            int rowsAffected = ps.executeUpdate();
-            isDeleted = rowsAffected > 0;
-            System.out.println("Project deleted successfully!");
-        } catch (SQLException e) {
-            System.out.println("Error deleting project: " + e.getMessage());
-        }
-        return isDeleted;
-    }
-
     @Override
     public List<Project> getAll() {
         List<Project> projects = new ArrayList<>();

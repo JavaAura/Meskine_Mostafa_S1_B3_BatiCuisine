@@ -13,8 +13,6 @@ public interface QuoteRepository {
 
     void updateQuote(Quote quote);
 
-    boolean removeQuote(UUID id);
-
     List<Quote> getAllQuotes();
 
     Optional<Quote> getQuoteByProjectID(UUID projectID);

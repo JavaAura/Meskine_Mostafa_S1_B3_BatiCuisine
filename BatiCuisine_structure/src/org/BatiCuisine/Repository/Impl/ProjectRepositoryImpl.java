@@ -26,16 +26,6 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    public void updateProject(Project project) {
-        projectDao.update(project);
-    }
-
-    @Override
-    public boolean removeProject(UUID id) {
-        return projectDao.delete(id);
-    }
-
-    @Override
     public List<Project> getAllProjects() {
         return projectDao.getAll();
     }

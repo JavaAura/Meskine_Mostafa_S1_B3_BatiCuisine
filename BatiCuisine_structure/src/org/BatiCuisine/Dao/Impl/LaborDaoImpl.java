@@ -59,37 +59,6 @@ public class LaborDaoImpl implements LaborDao {
         return labor;
     }
 
-    @Override
-    public void update(Labor labor) {
-        String query = "UPDATE labors SET name = ?, componentType = ?, VAT_rate = ?, hourlyRate = ?, workingHours = ?, workerProductivity = ?, projectID = ? WHERE componentID = ?";
-        try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setString(1, labor.getName());
-            ps.setObject(2, labor.getComponentType(), Types.OTHER);
-            ps.setDouble(3, labor.getVATRate());
-            ps.setDouble(4, labor.getHourlyRate());
-            ps.setDouble(5, labor.getWorkingHours());
-            ps.setDouble(6, labor.getWorkerProductivity());
-            ps.setObject(7, labor.getProject().getProjectID());
-            ps.setObject(8, labor.getComponentID());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Error updating labor: " + e.getMessage());
-        }
-    }
-
-    @Override
-    public boolean delete(UUID id) {
-        String query = "DELETE FROM labors WHERE componentID = ?";
-        boolean isDeleted = false;
-        try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setObject(1, id);
-            int rowsDeleted = ps.executeUpdate();
-            isDeleted = rowsDeleted > 0;
-        } catch (SQLException e) {
-            System.out.println("Error deleting labor: " + e.getMessage());
-        }
-        return isDeleted;
-    }
 
     @Override
     public List<Labor> getAll() {
