@@ -10,7 +10,7 @@ public class Material extends Component {
     private double quantity;
     private double unitCost;
 
-    public Material(UUID componentID, String name, double VATRate, UUID projectID, double transportCost, double qualityCoefficient, double quantity, double unitCost) {
+    public Material(UUID componentID, String name, double VATRate, Project projectID, double transportCost, double qualityCoefficient, double quantity, double unitCost) {
         super(componentID, name, ComponentType.MATERIAL, VATRate, projectID);
         this.transportCost = transportCost;
         this.qualityCoefficient = qualityCoefficient;
@@ -19,7 +19,7 @@ public class Material extends Component {
     }
 
     public Material() {
-        super(UUID.randomUUID(), "", ComponentType.MATERIAL, 0.0, UUID.randomUUID());
+        super(UUID.randomUUID(), "", ComponentType.MATERIAL, 0.0, null);
         this.transportCost = 0.0;
         this.qualityCoefficient = 0.0;
         this.quantity = 0.0;

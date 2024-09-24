@@ -22,10 +22,10 @@ public class ConsoleUI {
     private final Connection connection = DbConnection.getInstance();
     private final Scanner scan = new Scanner(System.in);
     private final Validation validator = new Validation(scan);
-    private final ClientService clientService = new ClientService(new ClientRepositoryImpl(new ClientDaoImpl(connection)));
-    private final ProjectService projectService = new ProjectService(new ProjectRepositoryImpl(new ProjectDaoImpl(connection)));
-    private final ComponentService componentService = new ComponentService(new ComponentRepositoryImpl(new LaborDaoImpl(connection), new MaterialDaoImpl(connection)));
-    private final QuoteService quoteService = new QuoteService(new QuoteRepositoryImpl(new QuoteDaoImpl(connection)));
+    private final ClientService clientService = new ClientService(new ClientRepositoryImpl(new ClientDaoImpl()));
+    private final ProjectService projectService = new ProjectService(new ProjectRepositoryImpl(new ProjectDaoImpl()));
+    private final ComponentService componentService = new ComponentService(new ComponentRepositoryImpl(new LaborDaoImpl(), new MaterialDaoImpl()));
+    private final QuoteService quoteService = new QuoteService(new QuoteRepositoryImpl(new QuoteDaoImpl()));
     private Map<UUID, Material> materialsMap = new HashMap<>();
     private Map<UUID, Labor> laborsMap = new HashMap<>();
     private Project project = null;

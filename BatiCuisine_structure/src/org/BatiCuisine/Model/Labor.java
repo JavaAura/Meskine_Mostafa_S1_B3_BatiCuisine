@@ -9,7 +9,7 @@ public class Labor extends Component {
     private double workingHours;
     private double workerProductivity;
 
-    public Labor(UUID componentID, String name, double VATRate, UUID projectID, double hourlyRate, double workingHours, double workerProductivity) {
+    public Labor(UUID componentID, String name, double VATRate, Project projectID, double hourlyRate, double workingHours, double workerProductivity) {
         super(componentID, name, ComponentType.LABOR, VATRate, projectID);
         this.hourlyRate = hourlyRate;
         this.workingHours = workingHours;
@@ -17,7 +17,7 @@ public class Labor extends Component {
     }
 
     public Labor() {
-        super(UUID.randomUUID(), "", ComponentType.LABOR, 0.0, UUID.randomUUID());
+        super(UUID.randomUUID(), "", ComponentType.LABOR, 0.0, null);
         this.hourlyRate = 0.0;
         this.workingHours = 0.0;
         this.workerProductivity = 0.0;
