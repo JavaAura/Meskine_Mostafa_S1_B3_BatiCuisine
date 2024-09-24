@@ -1,13 +1,14 @@
 package org.BatiCuisine.Model;
 
+import java.time.LocalDate;
 import java.util.UUID;
 import java.util.Date;
 
 public class Quote {
     private UUID quoteID;
     private double estimatedAmount;
-    private Date issueDate;
-    private Date validityDate;
+    private LocalDate issueDate;
+    private LocalDate validityDate;
     private boolean isAccepted;
     private Project project;
 
@@ -15,7 +16,7 @@ public class Quote {
         this.quoteID = UUID.randomUUID();
     }
 
-    public Quote(UUID quoteID, double estimatedAmount, Date issueDate, Date validityDate, boolean isAccepted, Project project) {
+    public Quote(UUID quoteID, double estimatedAmount, LocalDate issueDate, LocalDate validityDate, boolean isAccepted, Project project) {
         this.quoteID = quoteID;
         this.estimatedAmount = estimatedAmount;
         this.issueDate = issueDate;
@@ -40,19 +41,19 @@ public class Quote {
         this.estimatedAmount = estimatedAmount;
     }
 
-    public Date getIssueDate() {
+    public LocalDate getIssueDate() {
         return issueDate;
     }
 
-    public void setIssueDate(Date issueDate) {
+    public void setIssueDate(LocalDate issueDate) {
         this.issueDate = issueDate;
     }
 
-    public Date getValidityDate() {
+    public LocalDate getValidityDate() {
         return validityDate;
     }
 
-    public void setValidityDate(Date validityDate) {
+    public void setValidityDate(LocalDate validityDate) {
         this.validityDate = validityDate;
     }
 

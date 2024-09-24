@@ -19,8 +19,8 @@ public class QuoteDaoImpl implements QuoteDao {
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setObject(1, quote.getQuoteID());
             ps.setDouble(2, quote.getEstimatedAmount());
-            ps.setDate(3, new java.sql.Date(quote.getIssueDate().getTime()));
-            ps.setDate(4, new java.sql.Date(quote.getValidityDate().getTime()));
+            ps.setDate(3, java.sql.Date.valueOf(quote.getIssueDate()));
+            ps.setDate(4, java.sql.Date.valueOf(quote.getValidityDate()));
             ps.setBoolean(5, quote.isAccepted());
             ps.setObject(6, quote.getProject().getProjectID());
             ps.executeUpdate();
@@ -41,8 +41,8 @@ public class QuoteDaoImpl implements QuoteDao {
                 quote = new Quote();
                 quote.setQuoteID(UUID.fromString(rs.getString("quoteID")));
                 quote.setEstimatedAmount(rs.getDouble("estimatedAmount"));
-                quote.setIssueDate(rs.getDate("issueDate"));
-                quote.setValidityDate(rs.getDate("validityDate"));
+                quote.setIssueDate(rs.getDate("issueDate").toLocalDate());
+                quote.setValidityDate(rs.getDate("validityDate").toLocalDate());
                 quote.setAccepted(rs.getBoolean("isAccepted"));
 
                 UUID projectID = UUID.fromString(rs.getString("projectID"));
@@ -62,8 +62,8 @@ public class QuoteDaoImpl implements QuoteDao {
         String query = "UPDATE quotes SET estimatedAmount = ?, issueDate = ?, validityDate = ?, isAccepted = ?, projectID = ? WHERE quoteID = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setDouble(1, quote.getEstimatedAmount());
-            ps.setDate(2, new java.sql.Date(quote.getIssueDate().getTime()));
-            ps.setDate(3, new java.sql.Date(quote.getValidityDate().getTime()));
+            ps.setDate(3, java.sql.Date.valueOf(quote.getIssueDate()));
+            ps.setDate(4, java.sql.Date.valueOf(quote.getValidityDate()));
             ps.setBoolean(4, quote.isAccepted());
             ps.setObject(5, quote.getProject().getProjectID());
             ps.setObject(6, quote.getQuoteID());
@@ -99,8 +99,8 @@ public class QuoteDaoImpl implements QuoteDao {
                 Quote quote = new Quote();
                 quote.setQuoteID(UUID.fromString(rs.getString("quoteID")));
                 quote.setEstimatedAmount(rs.getDouble("estimatedAmount"));
-                quote.setIssueDate(rs.getDate("issueDate"));
-                quote.setValidityDate(rs.getDate("validityDate"));
+                quote.setIssueDate(rs.getDate("issueDate").toLocalDate());
+                quote.setValidityDate(rs.getDate("validityDate").toLocalDate());
                 quote.setAccepted(rs.getBoolean("isAccepted"));
 
                 UUID projectID = UUID.fromString(rs.getString("projectID"));
