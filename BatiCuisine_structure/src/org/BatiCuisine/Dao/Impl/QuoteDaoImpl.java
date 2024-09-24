@@ -1,6 +1,7 @@
 package org.BatiCuisine.Dao.Impl;
 
 import org.BatiCuisine.Dao.Interfaces.QuoteDao;
+import org.BatiCuisine.Model.Project;
 import org.BatiCuisine.Model.Quote;
 
 import java.sql.*;
@@ -24,7 +25,7 @@ public class QuoteDaoImpl implements QuoteDao {
             ps.setDate(3, new java.sql.Date(quote.getIssueDate().getTime()));
             ps.setDate(4, new java.sql.Date(quote.getValidityDate().getTime()));
             ps.setBoolean(5, quote.isAccepted());
-            ps.setObject(6, quote.getProject());
+            ps.setObject(6, quote.getProject().getProjectID());
             ps.executeUpdate();
             System.out.println("Quote created successfully!");
         } catch (SQLException e) {
@@ -46,7 +47,11 @@ public class QuoteDaoImpl implements QuoteDao {
                 quote.setIssueDate(rs.getDate("issueDate"));
                 quote.setValidityDate(rs.getDate("validityDate"));
                 quote.setAccepted(rs.getBoolean("isAccepted"));
-                quote.setProject(UUID.fromString(rs.getString("projectID")));
+
+                UUID projectID = UUID.fromString(rs.getString("projectID"));
+                ProjectDaoImpl projectDao = new ProjectDaoImpl(connection);
+                Project project = projectDao.read(projectID);
+                quote.setProject(project);
             }
             System.out.println("Quote retrieved successfully!");
         } catch (SQLException e) {
@@ -63,7 +68,7 @@ public class QuoteDaoImpl implements QuoteDao {
             ps.setDate(2, new java.sql.Date(quote.getIssueDate().getTime()));
             ps.setDate(3, new java.sql.Date(quote.getValidityDate().getTime()));
             ps.setBoolean(4, quote.isAccepted());
-            ps.setObject(5, quote.getProject());
+            ps.setObject(5, quote.getProject().getProjectID());
             ps.setObject(6, quote.getQuoteID());
             ps.executeUpdate();
             System.out.println("Quote updated successfully!");
@@ -100,7 +105,12 @@ public class QuoteDaoImpl implements QuoteDao {
                 quote.setIssueDate(rs.getDate("issueDate"));
                 quote.setValidityDate(rs.getDate("validityDate"));
                 quote.setAccepted(rs.getBoolean("isAccepted"));
-//                quote.setProject(UUID.fromString(rs.getString("projectID")));
+
+                UUID projectID = UUID.fromString(rs.getString("projectID"));
+                ProjectDaoImpl projectDao = new ProjectDaoImpl(connection);
+                Project project = projectDao.read(projectID);
+                quote.setProject(project);
+
                 quotes.add(quote);
             }
             System.out.println("Retrieved all quotes successfully!");
