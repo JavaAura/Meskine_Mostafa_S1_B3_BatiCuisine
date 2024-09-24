@@ -22,7 +22,7 @@ import java.util.*;
 
 public class ConsoleUI {
     private final Connection connection = DbConnection.getInstance();
-    private  final Scanner scan = new Scanner(System.in);
+    private final Scanner scan = new Scanner(System.in);
     private final Validation validator = new Validation(scan);
     private final ClientService clientService = new ClientService(new ClientRepositoryImpl(new ClientDaoImpl(connection)));
     private final ProjectService projectService = new ProjectService(new ProjectRepositoryImpl(new ProjectDaoImpl(connection)));
@@ -36,8 +36,26 @@ public class ConsoleUI {
     public ConsoleUI() {
         while (true) {
             mainMenu();
-            int choice = scan.nextInt();
-            scan.nextLine();
+
+            int choice = -1;
+            boolean validInput = false;
+
+            while (!validInput) {
+                try {
+                    choice = scan.nextInt();
+                    scan.nextLine();
+
+                    if (choice >= 1 && choice <= 4) {
+                        validInput = true;
+                    } else {
+                        System.out.println("Invalid choice! Please enter a number between 1 and 4.");
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input! Please enter a number.");
+                    scan.nextLine();
+                }
+            }
+
             switch (choice) {
                 case 1 -> clientMenu();
                 case 2 -> showAllProjects();
@@ -46,11 +64,12 @@ public class ConsoleUI {
                     getProjectComponets();
                     calculateProjectCost();
                 }
-                default -> {
+                case 4 -> {
                     return;
                 }
             }
         }
+
     }
 
     public void mainMenu() {
@@ -65,41 +84,81 @@ public class ConsoleUI {
 
     public void clientMenu() {
         System.out.println("Would you like to search for an existing customer or add a new one?");
-        System.out.println("1.Search an existing customer");
-        System.out.println("2.Add a new customer");
+        System.out.println("1. Search an existing customer");
+        System.out.println("2. Add a new customer");
         System.out.print("=> ");
-        int choice = scan.nextInt();
-        scan.nextLine();
-        switch (choice) {
-            case 1 -> searchClient();
-            case 2 -> addNewClient();
-            default -> mainMenu();
+
+        int choice = -1;
+        while (true) {
+            try {
+                choice = scan.nextInt();
+                scan.nextLine();
+                if (choice == 1) {
+                    searchClient();
+                    break;
+                } else if (choice == 2) {
+                    addNewClient();
+                    break;
+                } else {
+                    System.out.println("Invalid choice! Please enter 1 or 2.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input! Please enter a number.");
+                scan.nextLine();
+            }
         }
     }
 
+
     public void materialMenu() {
-        System.out.println("--- Adding materials ---");
-        while (true) {
+        System.out.println("--- Adding Materials ---");
+        boolean addingMore = true;
+
+        while (addingMore) {
             addNewMaterial();
-            System.out.print("Do you want to add another material? (y/n) : ");
-            String confirmation = scan.nextLine();
-            if (!confirmation.equals("y")) {
-                break;
+
+            String confirmation = "";
+            while (true) {
+                System.out.print("Do you want to add another material? (y/n): ");
+                confirmation = scan.nextLine().trim().toLowerCase();
+                if (confirmation.equals("y")) {
+                    break;
+                } else if (confirmation.equals("n")) {
+                    addingMore = false;
+                    1
+                    break;
+                } else {
+                    System.out.println("Invalid input! Please enter 'y' or 'n'.");
+                }
             }
         }
+
         laborMenu();
     }
 
+
     public void laborMenu() {
         System.out.println("--- Adding Labor (Manpower) ---");
-        while (true) {
+        boolean addingMore = true;
+
+        while (addingMore) {
             addNewLabor();
-            System.out.print("Do you want to add another type of labor? (y/n): ");
-            String confirmation = scan.nextLine();
-            if (!confirmation.equals("y")) {
-                break;
+
+            String confirmation = "";
+            while (true) {
+                System.out.print("Do you want to add another type of labor? (y/n): ");
+                confirmation = scan.nextLine().trim().toLowerCase();
+                if (confirmation.equals("y")) {
+                    break;
+                } else if (confirmation.equals("n")) {
+                    addingMore = false;
+                    break;
+                } else {
+                    System.out.println("Invalid input! Please enter 'y' or 'n'.");
+                }
             }
         }
+
         taxesRate();
     }
 
@@ -339,21 +398,21 @@ public class ConsoleUI {
     }
 
 
-    public void getProjectComponets(){
+    public void getProjectComponets() {
         List<Component> components = componentService.getProjectComponents(project.getProjectID());
-        for(Component component: components){
-            if (component.getComponentType() == ComponentType.MATERIAL){
+        for (Component component : components) {
+            if (component.getComponentType() == ComponentType.MATERIAL) {
                 materialsMap.put(component.getComponentID(), (Material) component);
             }
-            if (component.getComponentType() == ComponentType.MATERIAL){
+            if (component.getComponentType() == ComponentType.MATERIAL) {
                 laborsMap.put(component.getComponentID(), (Labor) component);
             }
         }
     }
 
-    public void showAllProjects(){
+    public void showAllProjects() {
         List<Project> projects = projectService.getAllProjects();
-        for (Project project: projects){
+        for (Project project : projects) {
             project.showDetails();
         }
     }
@@ -380,7 +439,7 @@ public class ConsoleUI {
 
         double totalCost = totalMaterialCost + totalLaborCost;
 
-        if(profitMarginRate > 0){
+        if (profitMarginRate > 0) {
             totalCost = calculateProfitMargin(totalCost, profitMarginRate);
         }
 
@@ -388,12 +447,12 @@ public class ConsoleUI {
             totalCost = calculateDiscount(totalCost);
         }
 
-        System.out.println("**Total final cost of the project : "+ totalCost +" €**");
+        System.out.println("**Total final cost of the project : " + totalCost + " €**");
 
         project.setTotalCost(totalCost);
     }
 
-    public double calculateMaterialCost(){
+    public double calculateMaterialCost() {
         double totalMaterialCost = 0;
         double vatRate = 0;
         System.out.println("1. Materials:");
@@ -403,16 +462,16 @@ public class ConsoleUI {
             totalMaterialCost += materialCost;
             vatRate = material.getVATRate();
         }
-        System.out.println("**Total cost of materials before VAT : "+ totalMaterialCost +" €**");
-        if(vatRate > 0){
+        System.out.println("**Total cost of materials before VAT : " + totalMaterialCost + " €**");
+        if (vatRate > 0) {
             totalMaterialCost = costAfterVAT(totalMaterialCost, vatRate);
-            System.out.println("**Total cost of materials after VAT : "+ totalMaterialCost +" €**");
+            System.out.println("**Total cost of materials after VAT : " + totalMaterialCost + " €**");
         }
 
         return totalMaterialCost;
     }
 
-    public double calculateLaborCost(){
+    public double calculateLaborCost() {
         double totalLaborCost = 0;
         double vatRate = 0;
 
@@ -423,31 +482,31 @@ public class ConsoleUI {
             totalLaborCost += laborCost;
             vatRate = labor.getVATRate();
         }
-        System.out.println("**Total cost of labors before VAT : "+ totalLaborCost +" €**");
-        if(vatRate > 0){
+        System.out.println("**Total cost of labors before VAT : " + totalLaborCost + " €**");
+        if (vatRate > 0) {
             totalLaborCost = costAfterVAT(totalLaborCost, vatRate);
-            System.out.println("**Total cost of labors after VAT : "+ totalLaborCost +" €**");
+            System.out.println("**Total cost of labors after VAT : " + totalLaborCost + " €**");
         }
 
         return totalLaborCost;
     }
 
-    public double calculateProfitMargin(double totalCost, double profitMarginRate){
-        System.out.println("3. Total cost before profit margin: "+ totalCost +" €");
-        double profitMargin = totalCost * (profitMarginRate/100) ;
-        System.out.println("4. Profit margin ("+ profitMarginRate +"%): "+ profitMargin +" €");
+    public double calculateProfitMargin(double totalCost, double profitMarginRate) {
+        System.out.println("3. Total cost before profit margin: " + totalCost + " €");
+        double profitMargin = totalCost * (profitMarginRate / 100);
+        System.out.println("4. Profit margin (" + profitMarginRate + "%): " + profitMargin + " €");
         return (totalCost + profitMargin);
     }
 
-    public double calculateDiscount(double totalCost){
+    public double calculateDiscount(double totalCost) {
         double discount = 0.1;
         double discountAmount = totalCost * discount;
-        System.out.println("5. Total cost before discount: "+ totalCost +" €");
-        System.out.println("6. Discount amount ("+ discountAmount +"%): "+ discountAmount +" €");
+        System.out.println("5. Total cost before discount: " + totalCost + " €");
+        System.out.println("6. Discount amount (" + discountAmount + "%): " + discountAmount + " €");
         return (totalCost - discountAmount);
     }
 
-    public double costAfterVAT(double totalCost, double vatRate){
+    public double costAfterVAT(double totalCost, double vatRate) {
         return totalCost * (1 + vatRate / 100);
     }
 
