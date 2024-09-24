@@ -1,6 +1,5 @@
 package org.BatiCuisine.Service;
 
-import org.BatiCuisine.Model.Project;
 import org.BatiCuisine.Model.Quote;
 import org.BatiCuisine.Repository.Interfaces.QuoteRepository;
 
