@@ -125,7 +125,6 @@ public class ConsoleUI {
                     break;
                 } else if (confirmation.equals("n")) {
                     addingMore = false;
-                    1
                     break;
                 } else {
                     System.out.println("Invalid input! Please enter 'y' or 'n'.");
@@ -139,58 +138,24 @@ public class ConsoleUI {
 
     public void laborMenu() {
         System.out.println("--- Adding Labor (Manpower) ---");
-        boolean addingMore = true;
-
-        while (addingMore) {
+        while (true) {
             addNewLabor();
-
-            String confirmation = "";
-            while (true) {
-                System.out.print("Do you want to add another type of labor? (y/n): ");
-                confirmation = scan.nextLine().trim().toLowerCase();
-                if (confirmation.equals("y")) {
-                    break;
-                } else if (confirmation.equals("n")) {
-                    addingMore = false;
-                    break;
-                } else {
-                    System.out.println("Invalid input! Please enter 'y' or 'n'.");
-                }
+            if (!validator.confirmYesNo("Do you want to add another type of labor? (y/n): ")) {
+                break;
             }
         }
-
         taxesRate();
     }
 
     public void taxesRate() {
         System.out.println("--- Calculation of Total Cost ---");
 
-        String VatConfirmation = "";
-        while (true) {
-            System.out.print("Would you like to apply VAT to the project? (y/n): ");
-            VatConfirmation = scan.nextLine().trim().toLowerCase();
-            if (VatConfirmation.equals("y")) {
-                addVAT();
-                break;
-            } else if (VatConfirmation.equals("n")) {
-                break;
-            } else {
-                System.out.println("Invalid input! Please enter 'y' or 'n'.");
-            }
+        if (validator.confirmYesNo("Would you like to apply VAT to the project? (y/n): ")) {
+            addVAT();
         }
 
-        String marginConfirmation = "";
-        while (true) {
-            System.out.print("Would you like to apply a profit margin to the project? (y/n): ");
-            marginConfirmation = scan.nextLine().trim().toLowerCase();
-            if (marginConfirmation.equals("y")) {
-                addMargin();
-                break;
-            } else if (marginConfirmation.equals("n")) {
-                break;
-            } else {
-                System.out.println("Invalid input! Please enter 'y' or 'n'.");
-            }
+        if (validator.confirmYesNo("Would you like to apply a profit margin to the project? (y/n): ")) {
+            addMargin();
         }
 
         calculateProjectCost();
@@ -233,19 +198,10 @@ public class ConsoleUI {
             System.out.println("Client found!");
             System.out.println(client);
 
-            String choice = "";
-            while (true) {
-                System.out.print("Would you like to continue with this client? (y/n): ");
-                choice = scan.nextLine().trim().toLowerCase();
-                if (choice.equals("y")) {
-                    addNewProject();
-                    break;
-                } else if (choice.equals("n")) {
-                    clientMenu();
-                    break;
-                } else {
-                    System.out.println("Invalid input! Please enter 'y' or 'n'.");
-                }
+            if (validator.confirmYesNo("Would you like to continue with this client? (y/n): ")) {
+                addNewProject();
+            } else {
+                clientMenu();
             }
         } else {
             System.out.println("No client found by the name *" + name + "* !");

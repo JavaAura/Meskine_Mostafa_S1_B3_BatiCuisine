@@ -92,5 +92,19 @@ public class Validation {
         return input;
     }
 
+    public boolean confirmYesNo(String message) {
+        String confirmation;
+        while (true) {
+            System.out.print(message);
+            confirmation = scanner.nextLine().trim().toLowerCase();
+            if (confirmation.equals("y")) {
+                return true;
+            } else if (confirmation.equals("n")) {
+                return false;
+            } else {
+                System.out.println("Invalid input! Please enter 'y' or 'n'.");
+            }
+        }
+    }
 
 }
