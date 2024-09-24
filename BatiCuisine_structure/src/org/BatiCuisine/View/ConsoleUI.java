@@ -61,6 +61,7 @@ public class ConsoleUI {
                     selectProject();
                     getProjectComponents();
                     calculateProjectCost();
+                    checkForQuote();
                 }
                 case 4 -> {
                     return;
