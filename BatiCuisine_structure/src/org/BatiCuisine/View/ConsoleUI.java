@@ -104,70 +104,102 @@ public class ConsoleUI {
     }
 
     public void taxesRate() {
-        System.out.println("--- Calculation of total cost ---");
-        System.out.print("Would you like to apply VAT to the project? (y/n): ");
-        String VatConfirmation = scan.nextLine();
-        if (VatConfirmation.equals("y")) {
-            addVAT();
+        System.out.println("--- Calculation of Total Cost ---");
+
+        String VatConfirmation = "";
+        while (true) {
+            System.out.print("Would you like to apply VAT to the project? (y/n): ");
+            VatConfirmation = scan.nextLine().trim().toLowerCase();
+            if (VatConfirmation.equals("y")) {
+                addVAT();
+                break;
+            } else if (VatConfirmation.equals("n")) {
+                break;
+            } else {
+                System.out.println("Invalid input! Please enter 'y' or 'n'.");
+            }
         }
-        System.out.print("Would you like to apply a profit margin to the project? (y/n): ");
-        String marginConfirmation = scan.nextLine();
-        if (marginConfirmation.equals("y")) {
-            addMargin();
+
+        String marginConfirmation = "";
+        while (true) {
+            System.out.print("Would you like to apply a profit margin to the project? (y/n): ");
+            marginConfirmation = scan.nextLine().trim().toLowerCase();
+            if (marginConfirmation.equals("y")) {
+                addMargin();
+                break;
+            } else if (marginConfirmation.equals("n")) {
+                break;
+            } else {
+                System.out.println("Invalid input! Please enter 'y' or 'n'.");
+            }
         }
 
         calculateProjectCost();
-
         insertAll();
     }
 
     public void addNewClient() {
-        System.out.print("Enter client name: ");
-        String name = scan.nextLine();
-        System.out.print("Enter client address: ");
-        String address = scan.nextLine();
-        System.out.print("Enter client phone: ");
-        String phone = scan.nextLine();
-        System.out.print("Is the client a professional? (true/false): ");
-        boolean isProfessional = scan.nextBoolean();
+        String name = validator.validateStringInput("Enter client name: ");
+        String address = validator.validateStringInput("Enter client address: ");
+        String phone = validator.validateStringInput("Enter client phone: ");
+
+        boolean isProfessional = false;
+        while (true) {
+            System.out.print("Is the client a professional? (true/false): ");
+            String input = scan.nextLine().trim().toLowerCase();
+            if (input.equals("true")) {
+                isProfessional = true;
+                break;
+            } else if (input.equals("false")) {
+                break;
+            } else {
+                System.out.println("Invalid input! Please enter 'true' or 'false'.");
+            }
+        }
 
         client = new Client(UUID.randomUUID(), name, address, phone, isProfessional);
         clientService.addClient(client);
         addNewProject();
     }
 
+
     public void searchClient() {
-        System.out.println("--- searching an existing customer ---");
-        System.out.print("Enter customer name: ");
-        String name = scan.nextLine();
+        System.out.println("--- Searching an Existing Customer ---");
+
+        String name = validator.validateStringInput("Enter customer name: ");
         Optional<Client> clientOptional = clientService.getClientByName(name);
+
         if (clientOptional.isPresent()) {
-             client = clientOptional.get();
+            client = clientOptional.get();
             System.out.println("Client found!");
             System.out.println(client);
-            System.out.print("Would you like to continue with this client? (y/n):");
-            String choice = scan.nextLine();
-            switch (choice) {
-                case "y" -> addNewProject();
-                case "n" -> clientMenu();
-                default -> {
-                    System.out.println("invalid input!");
-                    mainMenu();
+
+            String choice = "";
+            while (true) {
+                System.out.print("Would you like to continue with this client? (y/n): ");
+                choice = scan.nextLine().trim().toLowerCase();
+                if (choice.equals("y")) {
+                    addNewProject();
+                    break;
+                } else if (choice.equals("n")) {
+                    clientMenu();
+                    break;
+                } else {
+                    System.out.println("Invalid input! Please enter 'y' or 'n'.");
                 }
             }
         } else {
-            System.out.println("no client found by the name *" + name + "* !");
+            System.out.println("No client found by the name *" + name + "* !");
             clientMenu();
         }
     }
 
+
     public void addNewProject() {
         System.out.println("--- Creating a New Project ---");
-        System.out.print("Enter the project name: ");
-        String name = scan.nextLine();
-        System.out.print("Enter the kitchen area (in m²): ");
-        double area = scan.nextDouble();
-        scan.nextLine();
+
+        String name = validator.validateStringInput("Enter the project name: ");
+        double area = validator.validateDoubleInput("Enter the kitchen area (in m²): "); // Use your existing double validation method
 
         project = new Project();
         project.setProjectName(name);
@@ -177,6 +209,7 @@ public class ConsoleUI {
 
         materialMenu();
     }
+
 
     public void addNewMaterial() {
         String name = validator.validateStringInput("Enter the name of the material: ");
@@ -223,7 +256,7 @@ public class ConsoleUI {
 
 
     public void addVAT() {
-        double VATRate = validator.validateDoubleInput("Enter the VAT percentage (%): ");
+        double VATRate = validator.validatePercentageInput("Enter the VAT percentage (%): ");
 
         if (!materialsMap.isEmpty()) {
             for (Map.Entry<UUID, Material> entry : materialsMap.entrySet()) {
@@ -242,8 +275,7 @@ public class ConsoleUI {
 
 
     public void addMargin() {
-        System.out.print("Enter the profit margin percentage (%): ");
-        double profitMargin = Double.parseDouble(scan.nextLine());
+        double profitMargin = validator.validatePercentageInput("Enter the profit margin percentage (%): ");
         project.setProfitMargin(profitMargin);
     }
 
@@ -266,41 +298,26 @@ public class ConsoleUI {
         saveQuote();
     }
 
-    public void saveQuote(){
+    public void saveQuote() {
         Quote quote = new Quote();
         System.out.println("--- Quote Registration ---");
-        // this is here for testing only
-        System.out.println("Enter the date the quote was issued (format: dd/MM/yyyy): ");
-        String dateInput = scan.nextLine();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-        try {
-            Date issueDate = dateFormat.parse(dateInput);
-            quote.setIssueDate(issueDate);
-        } catch (ParseException e) {
-            System.out.println("Invalid date format. Please enter the date in dd/MM/yyyy format.");
-        }
+        Date issueDate = validator.validateDateInput("Enter the date the quote was issued (format: dd/MM/yyyy): ");
+        quote.setIssueDate(issueDate);
 
-        System.out.println("Enter the validity date of the quote (format: dd/mm/yyyy): ");
-        String dateInput2 = scan.nextLine();
-
-        try {
-            Date validityDate = dateFormat.parse(dateInput2);
-            quote.setValidityDate(validityDate);
-        } catch (ParseException e) {
-            System.out.println("Invalid date format. Please enter the date in dd/MM/yyyy format.");
-        }
-        // end section
+        Date validityDate = validator.validateDateInput("Enter the validity date of the quote (format: dd/MM/yyyy): ");
+        quote.setValidityDate(validityDate);
 
         quote.setEstimatedAmount(project.getTotalCost());
         quote.setProject(project);
 
         System.out.println("Would you like to save the quote? (y/n) : ");
         String confirmation = scan.nextLine();
-        if (confirmation.equals("y")){
+        if (confirmation.equals("y")) {
             quoteService.addQuote(quote);
         }
     }
+
 
     public void selectProject() {
         List<Project> projects = projectService.getAllProjects();
@@ -313,23 +330,14 @@ public class ConsoleUI {
             System.out.println("*******************************");
         }
 
-        System.out.print("Please choose a project by entering the index: ");
-        int selectedIndex = -1;
+        int selectedIndex = validator.validateIntegerInput("Please choose a project by entering the index: ", 0, projects.size() - 1);
 
-        try {
-            selectedIndex = scan.nextInt();
-            if (selectedIndex >= 0 && selectedIndex < projects.size()) {
-                Project selectedProject = projects.get(selectedIndex);
-                System.out.println("calculating Cost:");
-                project = selectedProject;
-                calculateProjectCost();
-            } else {
-                System.out.println("Invalid index. Please choose a valid index.");
-            }
-        } catch (Exception e) {
-            System.out.println("Invalid input. Please enter a number.");
-        }
+        Project selectedProject = projects.get(selectedIndex);
+        System.out.println("calculating Cost:");
+        project = selectedProject;
+        calculateProjectCost();
     }
+
 
     public void getProjectComponets(){
         List<Component> components = componentService.getProjectComponents(project.getProjectID());
