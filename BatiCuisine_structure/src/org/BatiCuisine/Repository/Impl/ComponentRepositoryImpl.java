@@ -74,6 +74,7 @@ public class ComponentRepositoryImpl implements ComponentRepository {
 
     public List<Component> getProjectComponents(UUID projectID) {
         List<Component> components = new ArrayList<>();
+
         components.addAll(materialDao.getAll());
         components.addAll(laborDao.getAll());
 

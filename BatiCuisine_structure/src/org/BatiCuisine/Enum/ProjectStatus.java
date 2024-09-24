@@ -7,7 +7,7 @@ public enum ProjectStatus {
 
     public static ProjectStatus fromString(String status) {
         switch (status.toUpperCase()) {
-            case "IN PROGRESS":
+            case "IN_PROGRESS":
                 return IN_PROGRESS;
             case "FINISHED":
                 return FINISHED;

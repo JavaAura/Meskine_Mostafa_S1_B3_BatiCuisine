@@ -22,7 +22,7 @@ public class ProjectDaoImpl implements ProjectDao {
             ps.setString(2, project.getProjectName());
             ps.setDouble(3, project.getProfitMargin());
             ps.setDouble(4, project.getTotalCost());
-            ps.setString(5, project.getProjectStatus().name());
+            ps.setObject(5, project.getProjectStatus(), Types.OTHER);
             ps.setDouble(6, project.getSurface());
             ps.setObject(7, project.getClient().getClientID());
 

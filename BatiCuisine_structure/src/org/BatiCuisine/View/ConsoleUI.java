@@ -197,7 +197,6 @@ public class ConsoleUI {
         }
     }
 
-
     public void addNewProject() {
         System.out.println("--- Creating a New Project ---");
 
@@ -337,6 +336,7 @@ public class ConsoleUI {
         Project selectedProject = projects.get(selectedIndex);
         System.out.println("calculating Cost:");
         project = selectedProject;
+        client = project.getClient();
         calculateProjectCost();
     }
 
