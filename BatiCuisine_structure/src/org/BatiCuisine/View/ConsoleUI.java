@@ -163,7 +163,7 @@ public class ConsoleUI {
     public void addNewClient() {
         String name = validator.validateName("Enter client name: ");
         String address = validator.validateStringInput("Enter client address: ");
-        String phone = validator.validateStringInput("Enter client phone: ");
+        String phone = validator.validatePhone("Enter client phone: ");
 
         boolean isProfessional = false;
         while (true) {
@@ -212,7 +212,7 @@ public class ConsoleUI {
         System.out.println("--- Creating a New Project ---");
 
         String name = validator.validateStringInput("Enter the project name: ");
-        double area = validator.validateDoubleInput("Enter the kitchen area (in m²): "); // Use your existing double validation method
+        double area = validator.validateDoubleInput("Enter the kitchen area (in m²): ");
 
         project = new Project();
         project.setProjectName(name);

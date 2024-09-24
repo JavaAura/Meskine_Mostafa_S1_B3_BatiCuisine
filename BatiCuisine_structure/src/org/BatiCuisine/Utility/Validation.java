@@ -31,6 +31,24 @@ public class Validation {
         }
     }
 
+    public String validatePhone(String prompt) {
+        String phone;
+        Pattern pattern = Pattern.compile("^[\\d\\s\\-\\(\\)]+$");
+
+        while (true) {
+            System.out.print(prompt);
+            phone = scanner.nextLine().trim();
+
+            if (phone.isEmpty()) {
+                System.out.println("Invalid input! The phone number cannot be empty.");
+            } else if (pattern.matcher(phone).matches()) {
+                return phone;
+            } else {
+                System.out.println("Invalid input! The phone number can only contain digits, spaces, dashes, and parentheses.");
+            }
+        }
+    }
+
     public String validateStringInput(String prompt) {
         String input;
         while (true) {
