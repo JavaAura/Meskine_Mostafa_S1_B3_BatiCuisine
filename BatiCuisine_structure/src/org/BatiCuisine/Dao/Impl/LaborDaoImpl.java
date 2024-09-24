@@ -1,6 +1,7 @@
 package org.BatiCuisine.Dao.Impl;
 
 import org.BatiCuisine.Dao.Interfaces.LaborDao;
+import org.BatiCuisine.Database.DbConnection;
 import org.BatiCuisine.Model.Client;
 import org.BatiCuisine.Model.Labor;
 import org.BatiCuisine.Model.Project;
@@ -11,11 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class LaborDaoImpl implements LaborDao {
-    private final Connection connection;
-
-    public LaborDaoImpl(Connection connection) {
-        this.connection = connection;
-    }
+    private final Connection connection = DbConnection.getInstance();
 
     @Override
     public void create(Labor labor) {
@@ -32,6 +29,10 @@ public class LaborDaoImpl implements LaborDao {
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error creating labor: " + e.getMessage());
+        } finally {
+            if (connection != null) {
+                DbConnection.closeConnection();
+            }
         }
     }
 
@@ -51,13 +52,17 @@ public class LaborDaoImpl implements LaborDao {
                 labor.setWorkerProductivity(rs.getDouble("workerProductivity"));
 
                 UUID projectID = UUID.fromString(rs.getString("projectID"));
-                ProjectDaoImpl projectDao = new ProjectDaoImpl(connection);
+                ProjectDaoImpl projectDao = new ProjectDaoImpl();
                 Project project = projectDao.read(projectID);
                 labor.setProject(project);
 
             }
         } catch (SQLException e) {
             System.out.println("Error reading labor: " + e.getMessage());
+        } finally {
+            if (connection != null) {
+                DbConnection.closeConnection();
+            }
         }
         return labor;
     }
@@ -77,6 +82,10 @@ public class LaborDaoImpl implements LaborDao {
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error updating labor: " + e.getMessage());
+        } finally {
+            if (connection != null) {
+                DbConnection.closeConnection();
+            }
         }
     }
 
@@ -90,6 +99,10 @@ public class LaborDaoImpl implements LaborDao {
             isDeleted = rowsDeleted > 0;
         } catch (SQLException e) {
             System.out.println("Error deleting labor: " + e.getMessage());
+        } finally {
+            if (connection != null) {
+                DbConnection.closeConnection();
+            }
         }
         return isDeleted;
     }
@@ -110,7 +123,7 @@ public class LaborDaoImpl implements LaborDao {
                 labor.setWorkerProductivity(rs.getDouble("workerProductivity"));
 
                 UUID projectID = UUID.fromString(rs.getString("projectID"));
-                ProjectDaoImpl projectDao = new ProjectDaoImpl(connection);
+                ProjectDaoImpl projectDao = new ProjectDaoImpl();
                 Project project = projectDao.read(projectID);
                 labor.setProject(project);
 
@@ -118,6 +131,10 @@ public class LaborDaoImpl implements LaborDao {
             }
         } catch (SQLException e) {
             System.out.println("Error retrieving all labors: " + e.getMessage());
+        } finally {
+            if (connection != null) {
+                DbConnection.closeConnection();
+            }
         }
         return labors;
     }

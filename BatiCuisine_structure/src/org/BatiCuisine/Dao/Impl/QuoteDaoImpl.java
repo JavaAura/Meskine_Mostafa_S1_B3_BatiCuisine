@@ -1,6 +1,7 @@
 package org.BatiCuisine.Dao.Impl;
 
 import org.BatiCuisine.Dao.Interfaces.QuoteDao;
+import org.BatiCuisine.Database.DbConnection;
 import org.BatiCuisine.Model.Project;
 import org.BatiCuisine.Model.Quote;
 
@@ -10,11 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class QuoteDaoImpl implements QuoteDao {
-    private final Connection connection;
-
-    public QuoteDaoImpl(Connection connection) {
-        this.connection = connection;
-    }
+    private final Connection connection = DbConnection.getInstance();
 
     @Override
     public void create(Quote quote) {
@@ -30,6 +27,10 @@ public class QuoteDaoImpl implements QuoteDao {
             System.out.println("Quote created successfully!");
         } catch (SQLException e) {
             System.out.println("Error creating quote: " + e.getMessage());
+        } finally {
+            if (connection != null) {
+                DbConnection.closeConnection();
+            }
         }
     }
 
@@ -49,13 +50,17 @@ public class QuoteDaoImpl implements QuoteDao {
                 quote.setAccepted(rs.getBoolean("isAccepted"));
 
                 UUID projectID = UUID.fromString(rs.getString("projectID"));
-                ProjectDaoImpl projectDao = new ProjectDaoImpl(connection);
+                ProjectDaoImpl projectDao = new ProjectDaoImpl();
                 Project project = projectDao.read(projectID);
                 quote.setProject(project);
             }
             System.out.println("Quote retrieved successfully!");
         } catch (SQLException e) {
             System.out.println("Error retrieving quote: " + e.getMessage());
+        } finally {
+            if (connection != null) {
+                DbConnection.closeConnection();
+            }
         }
         return quote;
     }
@@ -74,6 +79,10 @@ public class QuoteDaoImpl implements QuoteDao {
             System.out.println("Quote updated successfully!");
         } catch (SQLException e) {
             System.out.println("Error updating quote: " + e.getMessage());
+        } finally {
+            if (connection != null) {
+                DbConnection.closeConnection();
+            }
         }
     }
 
@@ -88,6 +97,10 @@ public class QuoteDaoImpl implements QuoteDao {
             System.out.println("Quote deleted successfully!");
         } catch (SQLException e) {
             System.out.println("Error deleting quote: " + e.getMessage());
+        } finally {
+            if (connection != null) {
+                DbConnection.closeConnection();
+            }
         }
         return isDeleted;
     }
@@ -107,7 +120,7 @@ public class QuoteDaoImpl implements QuoteDao {
                 quote.setAccepted(rs.getBoolean("isAccepted"));
 
                 UUID projectID = UUID.fromString(rs.getString("projectID"));
-                ProjectDaoImpl projectDao = new ProjectDaoImpl(connection);
+                ProjectDaoImpl projectDao = new ProjectDaoImpl();
                 Project project = projectDao.read(projectID);
                 quote.setProject(project);
 
@@ -116,6 +129,10 @@ public class QuoteDaoImpl implements QuoteDao {
             System.out.println("Retrieved all quotes successfully!");
         } catch (SQLException e) {
             System.out.println("Error retrieving quotes: " + e.getMessage());
+        } finally {
+            if (connection != null) {
+                DbConnection.closeConnection();
+            }
         }
         return quotes;
     }

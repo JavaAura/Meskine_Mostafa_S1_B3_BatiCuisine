@@ -25,7 +25,6 @@ public class DbConnection {
                         String password = dotenv.get("password");
 
                         connection = DriverManager.getConnection(url, user, password);
-                        System.out.println("connection");
                     } catch (SQLException e) {
                         System.out.println("Error connecting to the database: " + e.getMessage());
                     }

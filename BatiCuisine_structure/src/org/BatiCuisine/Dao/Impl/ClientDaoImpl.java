@@ -1,6 +1,7 @@
 package org.BatiCuisine.Dao.Impl;
 
 import org.BatiCuisine.Dao.Interfaces.ClientDao;
+import org.BatiCuisine.Database.DbConnection;
 import org.BatiCuisine.Model.Client;
 
 import java.sql.*;
@@ -9,11 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class ClientDaoImpl implements ClientDao {
-    private final Connection connection;
-
-    public ClientDaoImpl(Connection connection) {
-        this.connection = connection;
-    }
+    private final Connection connection = DbConnection.getInstance();
 
     @Override
     public void create(Client client) {
@@ -32,6 +29,10 @@ public class ClientDaoImpl implements ClientDao {
             }
         } catch (SQLException e) {
             System.out.println("Error creating client: " + e.getMessage());
+        } finally {
+            if (connection != null) {
+                DbConnection.closeConnection();
+            }
         }
     }
 
@@ -57,6 +58,10 @@ public class ClientDaoImpl implements ClientDao {
             }
         } catch (SQLException e) {
             System.out.println("Error reading client: " + e.getMessage());
+        } finally {
+            if (connection != null) {
+                DbConnection.closeConnection();
+            }
         }
         return null;
     }
@@ -78,6 +83,10 @@ public class ClientDaoImpl implements ClientDao {
             }
         } catch (SQLException e) {
             System.out.println("Error updating client: " + e.getMessage());
+        } finally {
+            if (connection != null) {
+                DbConnection.closeConnection();
+            }
         }
     }
 
@@ -95,6 +104,10 @@ public class ClientDaoImpl implements ClientDao {
             }
         } catch (SQLException e) {
             System.out.println("Error deleting client: " + e.getMessage());
+        } finally {
+            if (connection != null) {
+                DbConnection.closeConnection();
+            }
         }
         return false;
     }
@@ -119,6 +132,10 @@ public class ClientDaoImpl implements ClientDao {
             }
         } catch (SQLException e) {
             System.out.println("Error retrieving clients: " + e.getMessage());
+        } finally {
+            if (connection != null) {
+                DbConnection.closeConnection();
+            }
         }
 
         return clients;

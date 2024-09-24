@@ -1,6 +1,7 @@
 package org.BatiCuisine.Dao.Impl;
 
 import org.BatiCuisine.Dao.Interfaces.ProjectDao;
+import org.BatiCuisine.Database.DbConnection;
 import org.BatiCuisine.Enum.ProjectStatus;
 import org.BatiCuisine.Model.Client;
 import org.BatiCuisine.Model.Project;
@@ -11,11 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class ProjectDaoImpl implements ProjectDao {
-    private final Connection connection;
-
-    public ProjectDaoImpl(Connection connection) {
-        this.connection = connection;
-    }
+    private final Connection connection = DbConnection.getInstance();
 
     @Override
     public void create(Project project) {
@@ -33,6 +30,10 @@ public class ProjectDaoImpl implements ProjectDao {
             System.out.println("Project created successfully!");
         } catch (SQLException e) {
             System.out.println("Error creating project: " + e.getMessage());
+        } finally {
+            if (connection != null) {
+                DbConnection.closeConnection();
+            }
         }
     }
 
@@ -59,7 +60,7 @@ public class ProjectDaoImpl implements ProjectDao {
 
                 // get client object
                 UUID clientID = UUID.fromString(rs.getString("clientID"));
-                ClientDaoImpl clientDAO = new ClientDaoImpl(connection);
+                ClientDaoImpl clientDAO = new ClientDaoImpl();
                 Client client = clientDAO.read(clientID);
 
                 project.setClient(client);
@@ -67,6 +68,10 @@ public class ProjectDaoImpl implements ProjectDao {
             System.out.println("Project retrieved successfully!");
         } catch (SQLException e) {
             System.out.println("Error retrieving project: " + e.getMessage());
+        } finally {
+            if (connection != null) {
+                DbConnection.closeConnection();
+            }
         }
         return project;
     }
@@ -88,6 +93,10 @@ public class ProjectDaoImpl implements ProjectDao {
             System.out.println("Project updated successfully!");
         } catch (SQLException e) {
             System.out.println("Error updating project: " + e.getMessage());
+        } finally {
+            if (connection != null) {
+                DbConnection.closeConnection();
+            }
         }
     }
 
@@ -103,6 +112,10 @@ public class ProjectDaoImpl implements ProjectDao {
             System.out.println("Project deleted successfully!");
         } catch (SQLException e) {
             System.out.println("Error deleting project: " + e.getMessage());
+        } finally {
+            if (connection != null) {
+                DbConnection.closeConnection();
+            }
         }
         return isDeleted;
     }
@@ -127,7 +140,7 @@ public class ProjectDaoImpl implements ProjectDao {
                 project.setSurface(rs.getDouble("surface"));
 
                 UUID clientID = UUID.fromString(rs.getString("clientID"));
-                ClientDaoImpl clientDAO = new ClientDaoImpl(connection);
+                ClientDaoImpl clientDAO = new ClientDaoImpl();
                 Client client = clientDAO.read(clientID);
                 project.setClient(client);
 
@@ -136,6 +149,10 @@ public class ProjectDaoImpl implements ProjectDao {
             System.out.println("Retrieved all projects successfully!");
         } catch (SQLException e) {
             System.out.println("Error retrieving projects: " + e.getMessage());
+        } finally {
+            if (connection != null) {
+                DbConnection.closeConnection();
+            }
         }
         return projects;
     }

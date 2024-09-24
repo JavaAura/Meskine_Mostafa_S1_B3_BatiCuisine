@@ -1,6 +1,7 @@
 package org.BatiCuisine.Dao.Impl;
 
 import org.BatiCuisine.Dao.Interfaces.MaterialDao;
+import org.BatiCuisine.Database.DbConnection;
 import org.BatiCuisine.Model.Material;
 import org.BatiCuisine.Model.Project;
 
@@ -10,11 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class MaterialDaoImpl implements MaterialDao {
-    private final Connection connection;
-
-    public MaterialDaoImpl(Connection connection) {
-        this.connection = connection;
-    }
+    private final Connection connection = DbConnection.getInstance();
 
     @Override
     public void create(Material material) {
@@ -32,6 +29,10 @@ public class MaterialDaoImpl implements MaterialDao {
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error creating material: " + e.getMessage());
+        } finally {
+            if (connection != null) {
+                DbConnection.closeConnection();
+            }
         }
     }
 
@@ -52,12 +53,16 @@ public class MaterialDaoImpl implements MaterialDao {
                 material.setUnitCost(rs.getDouble("unitCost"));
 
                 UUID projectID = UUID.fromString(rs.getString("projectID"));
-                ProjectDaoImpl projectDao = new ProjectDaoImpl(connection);
+                ProjectDaoImpl projectDao = new ProjectDaoImpl();
                 Project project = projectDao.read(projectID);
                 material.setProject(project);
             }
         } catch (SQLException e) {
             System.out.println("Error reading material: " + e.getMessage());
+        } finally {
+            if (connection != null) {
+                DbConnection.closeConnection();
+            }
         }
         return material;
     }
@@ -78,6 +83,10 @@ public class MaterialDaoImpl implements MaterialDao {
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error updating material: " + e.getMessage());
+        } finally {
+            if (connection != null) {
+                DbConnection.closeConnection();
+            }
         }
     }
 
@@ -91,6 +100,10 @@ public class MaterialDaoImpl implements MaterialDao {
             isDeleted = rowsDeleted > 0;
         } catch (SQLException e) {
             System.out.println("Error deleting material: " + e.getMessage());
+        } finally {
+            if (connection != null) {
+                DbConnection.closeConnection();
+            }
         }
         return isDeleted;
     }
@@ -112,7 +125,7 @@ public class MaterialDaoImpl implements MaterialDao {
                 material.setUnitCost(rs.getDouble("unitCost"));
 
                 UUID projectID = UUID.fromString(rs.getString("projectID"));
-                ProjectDaoImpl projectDao = new ProjectDaoImpl(connection);
+                ProjectDaoImpl projectDao = new ProjectDaoImpl();
                 Project project = projectDao.read(projectID);
                 material.setProject(project);
 
@@ -120,6 +133,10 @@ public class MaterialDaoImpl implements MaterialDao {
             }
         } catch (SQLException e) {
             System.out.println("Error retrieving all materials: " + e.getMessage());
+        } finally {
+            if (connection != null) {
+                DbConnection.closeConnection();
+            }
         }
         return materials;
     }
