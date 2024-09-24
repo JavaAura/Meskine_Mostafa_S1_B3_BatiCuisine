@@ -29,10 +29,6 @@ public class LaborDaoImpl implements LaborDao {
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error creating labor: " + e.getMessage());
-        } finally {
-            if (connection != null) {
-                DbConnection.closeConnection();
-            }
         }
     }
 
@@ -59,10 +55,6 @@ public class LaborDaoImpl implements LaborDao {
             }
         } catch (SQLException e) {
             System.out.println("Error reading labor: " + e.getMessage());
-        } finally {
-            if (connection != null) {
-                DbConnection.closeConnection();
-            }
         }
         return labor;
     }
@@ -82,10 +74,6 @@ public class LaborDaoImpl implements LaborDao {
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error updating labor: " + e.getMessage());
-        } finally {
-            if (connection != null) {
-                DbConnection.closeConnection();
-            }
         }
     }
 
@@ -99,10 +87,6 @@ public class LaborDaoImpl implements LaborDao {
             isDeleted = rowsDeleted > 0;
         } catch (SQLException e) {
             System.out.println("Error deleting labor: " + e.getMessage());
-        } finally {
-            if (connection != null) {
-                DbConnection.closeConnection();
-            }
         }
         return isDeleted;
     }
@@ -131,10 +115,6 @@ public class LaborDaoImpl implements LaborDao {
             }
         } catch (SQLException e) {
             System.out.println("Error retrieving all labors: " + e.getMessage());
-        } finally {
-            if (connection != null) {
-                DbConnection.closeConnection();
-            }
         }
         return labors;
     }

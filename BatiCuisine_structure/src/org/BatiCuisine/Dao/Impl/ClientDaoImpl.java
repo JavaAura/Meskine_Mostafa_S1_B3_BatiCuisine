@@ -29,10 +29,6 @@ public class ClientDaoImpl implements ClientDao {
             }
         } catch (SQLException e) {
             System.out.println("Error creating client: " + e.getMessage());
-        } finally {
-            if (connection != null) {
-                DbConnection.closeConnection();
-            }
         }
     }
 
@@ -58,10 +54,6 @@ public class ClientDaoImpl implements ClientDao {
             }
         } catch (SQLException e) {
             System.out.println("Error reading client: " + e.getMessage());
-        } finally {
-            if (connection != null) {
-                DbConnection.closeConnection();
-            }
         }
         return null;
     }
@@ -83,10 +75,6 @@ public class ClientDaoImpl implements ClientDao {
             }
         } catch (SQLException e) {
             System.out.println("Error updating client: " + e.getMessage());
-        } finally {
-            if (connection != null) {
-                DbConnection.closeConnection();
-            }
         }
     }
 
@@ -104,10 +92,6 @@ public class ClientDaoImpl implements ClientDao {
             }
         } catch (SQLException e) {
             System.out.println("Error deleting client: " + e.getMessage());
-        } finally {
-            if (connection != null) {
-                DbConnection.closeConnection();
-            }
         }
         return false;
     }
@@ -132,10 +116,6 @@ public class ClientDaoImpl implements ClientDao {
             }
         } catch (SQLException e) {
             System.out.println("Error retrieving clients: " + e.getMessage());
-        } finally {
-            if (connection != null) {
-                DbConnection.closeConnection();
-            }
         }
 
         return clients;

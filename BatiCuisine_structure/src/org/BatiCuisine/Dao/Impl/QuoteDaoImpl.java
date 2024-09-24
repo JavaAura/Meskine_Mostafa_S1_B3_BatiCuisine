@@ -27,10 +27,6 @@ public class QuoteDaoImpl implements QuoteDao {
             System.out.println("Quote created successfully!");
         } catch (SQLException e) {
             System.out.println("Error creating quote: " + e.getMessage());
-        } finally {
-            if (connection != null) {
-                DbConnection.closeConnection();
-            }
         }
     }
 
@@ -57,10 +53,6 @@ public class QuoteDaoImpl implements QuoteDao {
             System.out.println("Quote retrieved successfully!");
         } catch (SQLException e) {
             System.out.println("Error retrieving quote: " + e.getMessage());
-        } finally {
-            if (connection != null) {
-                DbConnection.closeConnection();
-            }
         }
         return quote;
     }
@@ -79,10 +71,6 @@ public class QuoteDaoImpl implements QuoteDao {
             System.out.println("Quote updated successfully!");
         } catch (SQLException e) {
             System.out.println("Error updating quote: " + e.getMessage());
-        } finally {
-            if (connection != null) {
-                DbConnection.closeConnection();
-            }
         }
     }
 
@@ -97,10 +85,6 @@ public class QuoteDaoImpl implements QuoteDao {
             System.out.println("Quote deleted successfully!");
         } catch (SQLException e) {
             System.out.println("Error deleting quote: " + e.getMessage());
-        } finally {
-            if (connection != null) {
-                DbConnection.closeConnection();
-            }
         }
         return isDeleted;
     }
@@ -129,10 +113,6 @@ public class QuoteDaoImpl implements QuoteDao {
             System.out.println("Retrieved all quotes successfully!");
         } catch (SQLException e) {
             System.out.println("Error retrieving quotes: " + e.getMessage());
-        } finally {
-            if (connection != null) {
-                DbConnection.closeConnection();
-            }
         }
         return quotes;
     }

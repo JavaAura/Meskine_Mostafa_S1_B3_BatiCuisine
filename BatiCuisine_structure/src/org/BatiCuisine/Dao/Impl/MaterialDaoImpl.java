@@ -29,10 +29,6 @@ public class MaterialDaoImpl implements MaterialDao {
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error creating material: " + e.getMessage());
-        } finally {
-            if (connection != null) {
-                DbConnection.closeConnection();
-            }
         }
     }
 
@@ -59,10 +55,6 @@ public class MaterialDaoImpl implements MaterialDao {
             }
         } catch (SQLException e) {
             System.out.println("Error reading material: " + e.getMessage());
-        } finally {
-            if (connection != null) {
-                DbConnection.closeConnection();
-            }
         }
         return material;
     }
@@ -83,10 +75,6 @@ public class MaterialDaoImpl implements MaterialDao {
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error updating material: " + e.getMessage());
-        } finally {
-            if (connection != null) {
-                DbConnection.closeConnection();
-            }
         }
     }
 
@@ -100,10 +88,6 @@ public class MaterialDaoImpl implements MaterialDao {
             isDeleted = rowsDeleted > 0;
         } catch (SQLException e) {
             System.out.println("Error deleting material: " + e.getMessage());
-        } finally {
-            if (connection != null) {
-                DbConnection.closeConnection();
-            }
         }
         return isDeleted;
     }
@@ -133,10 +117,6 @@ public class MaterialDaoImpl implements MaterialDao {
             }
         } catch (SQLException e) {
             System.out.println("Error retrieving all materials: " + e.getMessage());
-        } finally {
-            if (connection != null) {
-                DbConnection.closeConnection();
-            }
         }
         return materials;
     }

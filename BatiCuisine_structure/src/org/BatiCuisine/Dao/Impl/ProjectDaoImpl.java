@@ -30,10 +30,6 @@ public class ProjectDaoImpl implements ProjectDao {
             System.out.println("Project created successfully!");
         } catch (SQLException e) {
             System.out.println("Error creating project: " + e.getMessage());
-        } finally {
-            if (connection != null) {
-                DbConnection.closeConnection();
-            }
         }
     }
 
@@ -68,10 +64,6 @@ public class ProjectDaoImpl implements ProjectDao {
             System.out.println("Project retrieved successfully!");
         } catch (SQLException e) {
             System.out.println("Error retrieving project: " + e.getMessage());
-        } finally {
-            if (connection != null) {
-                DbConnection.closeConnection();
-            }
         }
         return project;
     }
@@ -93,10 +85,6 @@ public class ProjectDaoImpl implements ProjectDao {
             System.out.println("Project updated successfully!");
         } catch (SQLException e) {
             System.out.println("Error updating project: " + e.getMessage());
-        } finally {
-            if (connection != null) {
-                DbConnection.closeConnection();
-            }
         }
     }
 
@@ -112,10 +100,6 @@ public class ProjectDaoImpl implements ProjectDao {
             System.out.println("Project deleted successfully!");
         } catch (SQLException e) {
             System.out.println("Error deleting project: " + e.getMessage());
-        } finally {
-            if (connection != null) {
-                DbConnection.closeConnection();
-            }
         }
         return isDeleted;
     }
@@ -149,10 +133,6 @@ public class ProjectDaoImpl implements ProjectDao {
             System.out.println("Retrieved all projects successfully!");
         } catch (SQLException e) {
             System.out.println("Error retrieving projects: " + e.getMessage());
-        } finally {
-            if (connection != null) {
-                DbConnection.closeConnection();
-            }
         }
         return projects;
     }

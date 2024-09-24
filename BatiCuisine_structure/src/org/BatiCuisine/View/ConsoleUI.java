@@ -453,43 +453,4 @@ public class ConsoleUI {
         return totalCost * (1 + vatRate / 100);
     }
 
-    // this method is here only to test materials hashmap
-    public void showMaterials() {
-        System.out.println("--- Materials List ---");
-        if (materialsMap.isEmpty()) {
-            System.out.println("No materials added yet.");
-        } else {
-            for (Map.Entry<UUID, Material> entry : materialsMap.entrySet()) {
-                UUID componentID = entry.getKey();
-                Material material = entry.getValue();
-                System.out.println("ID: " + componentID +
-                        ", Name: " + material.getName() +
-                        ", Quantity: " + material.getQuantity() +
-                        ", Unit Cost: " + material.getUnitCost() +
-                        ", Transport Cost: " + material.getTransportCost() +
-                        ", Quality Coefficient: " + material.getQualityCoefficient() +
-                        ", VAT Rate: " + material.getVATRate());
-            }
-        }
-    }
-
-    // this method is here only to test labors hashmap
-    public void showLabors() {
-        System.out.println("--- Labor List ---");
-        if (laborsMap.isEmpty()) {
-            System.out.println("No labor added yet.");
-        } else {
-            for (Map.Entry<UUID, Labor> entry : laborsMap.entrySet()) {
-                UUID componentID = entry.getKey();
-                Labor labor = entry.getValue();
-                System.out.println("ID: " + componentID +
-                        ", Name: " + labor.getName() +
-                        ", Hourly Rate: " + labor.getHourlyRate() +
-                        ", Working Hours: " + labor.getWorkingHours() +
-                        ", Worker Productivity: " + labor.getWorkerProductivity() +
-                        ", VAT Rate: " + labor.getVATRate());
-            }
-        }
-    }
-
 }
