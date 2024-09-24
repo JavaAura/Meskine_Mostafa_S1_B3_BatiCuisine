@@ -16,8 +16,6 @@ import org.BatiCuisine.Service.QuoteService;
 import org.BatiCuisine.Utility.Validation;
 
 import java.sql.Connection;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ConsoleUI {
@@ -61,7 +59,7 @@ public class ConsoleUI {
                 case 2 -> showAllProjects();
                 case 3 -> {
                     selectProject();
-                    getProjectComponets();
+                    getProjectComponents();
                     calculateProjectCost();
                 }
                 case 4 -> {
@@ -163,7 +161,7 @@ public class ConsoleUI {
     }
 
     public void addNewClient() {
-        String name = validator.validateStringInput("Enter client name: ");
+        String name = validator.validateName("Enter client name: ");
         String address = validator.validateStringInput("Enter client address: ");
         String phone = validator.validateStringInput("Enter client phone: ");
 
@@ -227,7 +225,7 @@ public class ConsoleUI {
 
 
     public void addNewMaterial() {
-        String name = validator.validateStringInput("Enter the name of the material: ");
+        String name = validator.validateName("Enter the name of the material: ");
         double quantity = validator.validateDoubleInput("Enter the quantity of this material (in m²): ");
         double unitCost = validator.validateDoubleInput("Enter the unit cost of this material (€ / m²): ");
         double transportCost = validator.validateDoubleInput("Enter the transport cost of this material (€): ");
@@ -354,7 +352,7 @@ public class ConsoleUI {
     }
 
 
-    public void getProjectComponets() {
+    public void getProjectComponents() {
         List<Component> components = componentService.getProjectComponents(project.getProjectID());
         for (Component component : components) {
             if (component.getComponentType() == ComponentType.MATERIAL) {

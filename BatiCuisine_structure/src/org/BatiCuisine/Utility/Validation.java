@@ -4,12 +4,31 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class Validation {
     private final Scanner scanner;
 
     public Validation(Scanner scanner) {
         this.scanner = scanner;
+    }
+
+    public String validateName(String prompt) {
+        String name;
+        Pattern pattern = Pattern.compile("^[a-zA-Z\\s]*$");
+
+        while (true) {
+            System.out.print(prompt);
+            name = scanner.nextLine().trim();
+
+            if (name.isEmpty()) {
+                System.out.println("Invalid input! The name cannot be empty.");
+            } else if (pattern.matcher(name).matches()) {
+                return name;
+            } else {
+                System.out.println("Invalid input! The name must not contain numbers and can only include letters and spaces.");
+            }
+        }
     }
 
     public String validateStringInput(String prompt) {
