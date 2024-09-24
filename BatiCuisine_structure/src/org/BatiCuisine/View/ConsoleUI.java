@@ -302,14 +302,24 @@ public class ConsoleUI {
     public void checkForQuote() {
         Optional<Quote> optionalQuote = quoteService.getQuoteByProjectID(project.getProjectID());
         if (optionalQuote.isPresent()) {
+
             Quote quote = optionalQuote.get();
             System.out.println("this project already have a quote!");
-            System.out.println("");
-            if(validator.confirmYesNo("Would you like to continue with this client? (y/n): ")){
+            quote.showDetails();
 
+            if (!quote.isAccepted()) {
+                acceptQuote(quote);
             }
+
         } else {
             saveQuote();
+        }
+    }
+
+    public void acceptQuote(Quote quote) {
+        if (validator.confirmYesNo("Would you like to accept this quote? (y/n): ")) {
+            quote.setAccepted(true);
+            quoteService.updateQuote(quote);
         }
     }
 
