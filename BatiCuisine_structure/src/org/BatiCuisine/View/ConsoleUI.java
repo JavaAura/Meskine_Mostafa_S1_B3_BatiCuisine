@@ -16,6 +16,7 @@ import org.BatiCuisine.Service.QuoteService;
 import org.BatiCuisine.Utility.Validation;
 
 import java.sql.Connection;
+import java.time.LocalDate;
 import java.util.*;
 
 public class ConsoleUI {
@@ -304,21 +305,21 @@ public class ConsoleUI {
         Quote quote = new Quote();
         System.out.println("--- Quote Registration ---");
 
-        Date issueDate = validator.validateDateInput("Enter the date the quote was issued (format: dd/MM/yyyy): ");
+        // Validate issue date after today
+        LocalDate issueDate = validator.validateIssueDate("Enter the date the quote was issued (format: dd/MM/yyyy): ");
         quote.setIssueDate(issueDate);
 
-        Date validityDate = validator.validateDateInput("Enter the validity date of the quote (format: dd/MM/yyyy): ");
+        // Validate validity date after issue date
+        LocalDate validityDate = validator.validateValidityDate(issueDate, "Enter the validity date of the quote (format: dd/MM/yyyy): ");
         quote.setValidityDate(validityDate);
 
         quote.setEstimatedAmount(project.getTotalCost());
         quote.setProject(project);
 
-        if (validator.confirmYesNo("Would you like to save the quote? (y/n): ")) {
+        if (validator.confirmYesNo("Would you like to save the quote? (y/n) : ")) {
             quoteService.addQuote(quote);
         }
     }
-
-
 
     public void selectProject() {
         List<Project> projects = projectService.getAllProjects();

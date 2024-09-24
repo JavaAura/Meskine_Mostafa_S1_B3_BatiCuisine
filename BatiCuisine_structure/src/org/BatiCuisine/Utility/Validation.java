@@ -2,6 +2,9 @@ package org.BatiCuisine.Utility;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -96,22 +99,6 @@ public class Validation {
         return input;
     }
 
-    public Date validateDateInput(String prompt) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        Date date = null;
-        while (true) {
-            System.out.print(prompt);
-            String dateInput = scanner.nextLine();
-            try {
-                date = dateFormat.parse(dateInput);
-                break;
-            } catch (ParseException e) {
-                System.out.println("Invalid date format. Please enter the date in dd/MM/yyyy format.");
-            }
-        }
-        return date;
-    }
-
     public int validateIntegerInput(String prompt, int min, int max) {
         int input = -1;
         while (true) {
@@ -140,6 +127,42 @@ public class Validation {
                 return false;
             } else {
                 System.out.println("Invalid input! Please enter 'y' or 'n'.");
+            }
+        }
+    }
+
+    public LocalDate validateIssueDate(String message) {
+        while (true) {
+            String dateInput = validateStringInput(message);
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate issueDate = LocalDate.parse(dateInput, formatter);
+
+                if (issueDate.isAfter(LocalDate.now())) {
+                    return issueDate;
+                } else {
+                    System.out.println("Issue date must be after today's date.");
+                }
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid date format. Please enter the date in the format: dd/MM/yyyy.");
+            }
+        }
+    }
+
+    public LocalDate validateValidityDate(LocalDate issueDate, String message) {
+        while (true) {
+            String dateInput = validateStringInput(message);
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate validityDate = LocalDate.parse(dateInput, formatter);
+
+                if (validityDate.isAfter(issueDate)) {
+                    return validityDate;
+                } else {
+                    System.out.println("Validity date must be after the issue date.");
+                }
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid date format. Please enter the date in the format: dd/MM/yyyy.");
             }
         }
     }
