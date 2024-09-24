@@ -46,7 +46,7 @@ public class QuoteDaoImpl implements QuoteDao {
                 quote.setIssueDate(rs.getDate("issueDate"));
                 quote.setValidityDate(rs.getDate("validityDate"));
                 quote.setAccepted(rs.getBoolean("isAccepted"));
-//                quote.setProject(UUID.fromString(rs.getString("projectID")));
+                quote.setProject(UUID.fromString(rs.getString("projectID")));
             }
             System.out.println("Quote retrieved successfully!");
         } catch (SQLException e) {

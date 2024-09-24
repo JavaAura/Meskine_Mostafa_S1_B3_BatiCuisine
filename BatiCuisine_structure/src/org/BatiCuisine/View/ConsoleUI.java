@@ -110,24 +110,12 @@ public class ConsoleUI {
 
     public void materialMenu() {
         System.out.println("--- Adding Materials ---");
+
         boolean addingMore = true;
 
         while (addingMore) {
             addNewMaterial();
-
-            String confirmation = "";
-            while (true) {
-                System.out.print("Do you want to add another material? (y/n): ");
-                confirmation = scan.nextLine().trim().toLowerCase();
-                if (confirmation.equals("y")) {
-                    break;
-                } else if (confirmation.equals("n")) {
-                    addingMore = false;
-                    break;
-                } else {
-                    System.out.println("Invalid input! Please enter 'y' or 'n'.");
-                }
-            }
+            addingMore = validator.confirmYesNo("Do you want to add another material? (y/n): ");
         }
 
         laborMenu();
@@ -136,12 +124,14 @@ public class ConsoleUI {
 
     public void laborMenu() {
         System.out.println("--- Adding Labor (Manpower) ---");
-        while (true) {
+
+        boolean addingMore = true;
+
+        while (addingMore) {
             addNewLabor();
-            if (!validator.confirmYesNo("Do you want to add another type of labor? (y/n): ")) {
-                break;
-            }
+            addingMore = validator.confirmYesNo("Do you want to add another type of labor? (y/n): ");
         }
+
         taxesRate();
     }
 
@@ -324,12 +314,11 @@ public class ConsoleUI {
         quote.setEstimatedAmount(project.getTotalCost());
         quote.setProject(project);
 
-        System.out.println("Would you like to save the quote? (y/n) : ");
-        String confirmation = scan.nextLine();
-        if (confirmation.equals("y")) {
+        if (validator.confirmYesNo("Would you like to save the quote? (y/n): ")) {
             quoteService.addQuote(quote);
         }
     }
+
 
 
     public void selectProject() {

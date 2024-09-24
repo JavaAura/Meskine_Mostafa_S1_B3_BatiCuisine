@@ -1,7 +1,9 @@
 package org.BatiCuisine.Dao.Impl;
 
 import org.BatiCuisine.Dao.Interfaces.LaborDao;
+import org.BatiCuisine.Model.Client;
 import org.BatiCuisine.Model.Labor;
+import org.BatiCuisine.Model.Project;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -26,7 +28,7 @@ public class LaborDaoImpl implements LaborDao {
             ps.setDouble(5, labor.getHourlyRate());
             ps.setDouble(6, labor.getWorkingHours());
             ps.setDouble(7, labor.getWorkerProductivity());
-            ps.setObject(8, labor.getProjectID());
+            ps.setObject(8, labor.getProject().getProjectID());
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error creating labor: " + e.getMessage());
@@ -47,7 +49,12 @@ public class LaborDaoImpl implements LaborDao {
                 labor.setHourlyRate(rs.getDouble("hourlyRate"));
                 labor.setWorkingHours(rs.getDouble("workingHours"));
                 labor.setWorkerProductivity(rs.getDouble("workerProductivity"));
-                labor.setProjectID(UUID.fromString(rs.getString("projectID")));
+
+                UUID projectID = UUID.fromString(rs.getString("projectID"));
+                ProjectDaoImpl projectDao = new ProjectDaoImpl(connection);
+                Project project = projectDao.read(projectID);
+                labor.setProject(project);
+
             }
         } catch (SQLException e) {
             System.out.println("Error reading labor: " + e.getMessage());
@@ -65,7 +72,7 @@ public class LaborDaoImpl implements LaborDao {
             ps.setDouble(4, labor.getHourlyRate());
             ps.setDouble(5, labor.getWorkingHours());
             ps.setDouble(6, labor.getWorkerProductivity());
-            ps.setObject(7, labor.getProjectID());
+            ps.setObject(7, labor.getProject().getProjectID());
             ps.setObject(8, labor.getComponentID());
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -101,7 +108,12 @@ public class LaborDaoImpl implements LaborDao {
                 labor.setHourlyRate(rs.getDouble("hourlyRate"));
                 labor.setWorkingHours(rs.getDouble("workingHours"));
                 labor.setWorkerProductivity(rs.getDouble("workerProductivity"));
-                labor.setProjectID(UUID.fromString(rs.getString("projectID")));
+
+                UUID projectID = UUID.fromString(rs.getString("projectID"));
+                ProjectDaoImpl projectDao = new ProjectDaoImpl(connection);
+                Project project = projectDao.read(projectID);
+                labor.setProject(project);
+
                 labors.add(labor);
             }
         } catch (SQLException e) {
