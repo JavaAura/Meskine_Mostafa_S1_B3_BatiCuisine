@@ -20,7 +20,6 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class ConsoleUI {
-    private final Connection connection = DbConnection.getInstance();
     private final Scanner scan = new Scanner(System.in);
     private final Validation validator = new Validation(scan);
     private final ClientService clientService = new ClientService(new ClientRepositoryImpl(new ClientDaoImpl()));
@@ -149,6 +148,7 @@ public class ConsoleUI {
 
         calculateProjectCost();
         insertAll();
+        checkForQuote();
     }
 
     public void addNewClient() {
@@ -297,19 +297,29 @@ public class ConsoleUI {
                 componentService.addComponent(labor);
             }
         }
+    }
 
-        saveQuote();
+    public void checkForQuote() {
+        Optional<Quote> optionalQuote = quoteService.getQuoteByProjectID(project.getProjectID());
+        if (optionalQuote.isPresent()) {
+            Quote quote = optionalQuote.get();
+            System.out.println("this project already have a quote!");
+            System.out.println("");
+            if(validator.confirmYesNo("Would you like to continue with this client? (y/n): ")){
+
+            }
+        } else {
+            saveQuote();
+        }
     }
 
     public void saveQuote() {
         Quote quote = new Quote();
         System.out.println("--- Quote Registration ---");
 
-        // Validate issue date after today
         LocalDate issueDate = validator.validateIssueDate("Enter the date the quote was issued (format: dd/MM/yyyy): ");
         quote.setIssueDate(issueDate);
 
-        // Validate validity date after issue date
         LocalDate validityDate = validator.validateValidityDate(issueDate, "Enter the validity date of the quote (format: dd/MM/yyyy): ");
         quote.setValidityDate(validityDate);
 

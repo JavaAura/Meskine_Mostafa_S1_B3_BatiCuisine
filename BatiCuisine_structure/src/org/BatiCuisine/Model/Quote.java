@@ -2,7 +2,6 @@ package org.BatiCuisine.Model;
 
 import java.time.LocalDate;
 import java.util.UUID;
-import java.util.Date;
 
 public class Quote {
     private UUID quoteID;
@@ -71,6 +70,17 @@ public class Quote {
 
     public void setProject(Project project) {
         this.project = project;
+    }
+
+    public void showDetails() {
+        System.out.println("*******************************");
+        System.out.println("         Quote Details         ");
+        System.out.println("*******************************");
+        System.out.println("Estimated Amount: " + estimatedAmount);
+        System.out.println("Issue Date: " + issueDate);
+        System.out.println("Validity Date: " + validityDate);
+        System.out.println("Accepted: " + (isAccepted ? "Yes" : "No"));
+        System.out.println("Project Name: " + project.getProjectName());
     }
 
     @Override

@@ -5,6 +5,7 @@ import org.BatiCuisine.Model.Quote;
 import org.BatiCuisine.Repository.Interfaces.QuoteRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class QuoteRepositoryImpl implements QuoteRepository {
@@ -38,5 +39,12 @@ public class QuoteRepositoryImpl implements QuoteRepository {
     @Override
     public List<Quote> getAllQuotes() {
         return quoteDao.getAll();
+    }
+
+    public Optional<Quote> getQuoteByProjectID(UUID projectID){
+        return quoteDao.getAll()
+                .stream()
+                .filter(quote -> quote.getProject().getProjectID() == projectID)
+                .findFirst();
     }
 }

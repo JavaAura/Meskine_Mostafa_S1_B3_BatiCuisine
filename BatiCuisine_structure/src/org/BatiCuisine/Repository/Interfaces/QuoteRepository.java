@@ -3,6 +3,7 @@ package org.BatiCuisine.Repository.Interfaces;
 import org.BatiCuisine.Model.Quote;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface QuoteRepository {
@@ -15,4 +16,6 @@ public interface QuoteRepository {
     boolean removeQuote(UUID id);
 
     List<Quote> getAllQuotes();
+
+    Optional<Quote> getQuoteByProjectID(UUID projectID);
 }
