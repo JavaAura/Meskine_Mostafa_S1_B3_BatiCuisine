@@ -13,6 +13,7 @@ import org.BatiCuisine.Service.ClientService;
 import org.BatiCuisine.Service.ComponentService;
 import org.BatiCuisine.Service.ProjectService;
 import org.BatiCuisine.Service.QuoteService;
+import org.BatiCuisine.Utility.Validation;
 
 import java.sql.Connection;
 import java.text.ParseException;
@@ -21,7 +22,8 @@ import java.util.*;
 
 public class ConsoleUI {
     private final Connection connection = DbConnection.getInstance();
-    private static final Scanner scan = new Scanner(System.in);
+    private  final Scanner scan = new Scanner(System.in);
+    private final Validation validator = new Validation(scan);
     private final ClientService clientService = new ClientService(new ClientRepositoryImpl(new ClientDaoImpl(connection)));
     private final ProjectService projectService = new ProjectService(new ProjectRepositoryImpl(new ProjectDaoImpl(connection)));
     private final ComponentService componentService = new ComponentService(new ComponentRepositoryImpl(new LaborDaoImpl(connection), new MaterialDaoImpl(connection)));
@@ -177,20 +179,11 @@ public class ConsoleUI {
     }
 
     public void addNewMaterial() {
-        System.out.print("Enter the name of the material: ");
-        String name = scan.nextLine();
-
-        System.out.print("Enter the quantity of this material (in m²): ");
-        double quantity = Double.parseDouble(scan.nextLine());
-
-        System.out.print("Enter the unit cost of this material (€ / m²): ");
-        double unitCost = Double.parseDouble(scan.nextLine());
-
-        System.out.print("Enter the transport cost of this material (€): ");
-        double transportCost = Double.parseDouble(scan.nextLine());
-
-        System.out.print("Enter the quality coefficient of the material (1.0 = standard, > 1.0 = high quality): ");
-        double qualityCoefficient = Double.parseDouble(scan.nextLine());
+        String name = validator.validateStringInput("Enter the name of the material: ");
+        double quantity = validator.validateDoubleInput("Enter the quantity of this material (in m²): ");
+        double unitCost = validator.validateDoubleInput("Enter the unit cost of this material (€ / m²): ");
+        double transportCost = validator.validateDoubleInput("Enter the transport cost of this material (€): ");
+        double qualityCoefficient = validator.validateDoubleInput("Enter the quality coefficient of the material (1.0 = standard, > 1.0 = high quality): ");
 
         UUID componentID = UUID.randomUUID();
         Material material = new Material();
@@ -204,26 +197,19 @@ public class ConsoleUI {
         material.setProject(project);
 
         materialsMap.put(componentID, material);
-
         System.out.println("Material added successfully!");
     }
 
 
     public void addNewLabor() {
-        System.out.print("Enter the type of labor (e.g., Basic Worker, Specialist): ");
-        String name = scan.nextLine();
-
-        System.out.print("Enter the hourly rate for this labor (€ / h): ");
-        double hourlyRate = Double.parseDouble(scan.nextLine());
-
-        System.out.print("Enter the number of working hours: ");
-        double workingHours = Double.parseDouble(scan.nextLine());
-
-        System.out.print("Enter the productivity factor (1.0 = standard, > 1.0 = high productivity): ");
-        double workerProductivity = Double.parseDouble(scan.nextLine());
+        String name = validator.validateStringInput("Enter the type of labor (e.g., Basic Worker, Specialist): ");
+        double hourlyRate = validator.validateDoubleInput("Enter the hourly rate for this labor (€ / h): ");
+        double workingHours = validator.validateDoubleInput("Enter the number of working hours: ");
+        double workerProductivity = validator.validateDoubleInput("Enter the productivity factor (1.0 = standard, > 1.0 = high productivity): ");
 
         UUID componentID = UUID.randomUUID();
         Labor labor = new Labor();
+
         labor.setComponentID(componentID);
         labor.setName(name);
         labor.setHourlyRate(hourlyRate);
@@ -232,19 +218,20 @@ public class ConsoleUI {
         labor.setProject(project);
 
         laborsMap.put(componentID, labor);
-
         System.out.println("Labor added successfully!");
     }
 
+
     public void addVAT() {
-        System.out.print("Enter the VAT percentage (%): ");
-        double VATRate = Double.parseDouble(scan.nextLine());
+        double VATRate = validator.validateDoubleInput("Enter the VAT percentage (%): ");
+
         if (!materialsMap.isEmpty()) {
             for (Map.Entry<UUID, Material> entry : materialsMap.entrySet()) {
                 Material material = entry.getValue();
                 material.setVATRate(VATRate);
             }
         }
+
         if (!laborsMap.isEmpty()) {
             for (Map.Entry<UUID, Labor> entry : laborsMap.entrySet()) {
                 Labor labor = entry.getValue();
@@ -252,6 +239,7 @@ public class ConsoleUI {
             }
         }
     }
+
 
     public void addMargin() {
         System.out.print("Enter the profit margin percentage (%): ");
